@@ -1,0 +1,27 @@
+<header id="navbar" role="banner" class="navbar container navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="logo navbar-btn pull-left" href="{{ "/" | relative_url}}">
+        <img src="/assets/logos/readium-logo.png" alt="Home" />
+      </a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse">
+      <nav role="navigation">
+        
+        <ul class="menu nav navbar-nav">
+          {% for my_page in site.pages %}
+            {% if my_page.navtitle %}
+             <li class="leaf"><a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.navtitle | escape }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

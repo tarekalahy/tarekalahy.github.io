@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "Let's try!"
+date:   2016-10-31 11:56:00 +0100
+categories: test
+---
+### Scope and Goals of the Project
+The overall Readium project consists of three sub-projects:
+
+#### Readium SDK
+
+The goal of the SDK is to allow developers to create performant native applications that can run on various desktop and mobile platforms such as iOS and Android as well as desktops.  It supports DRM, but in such a way that it is agnostic with respect to the flavour of DRM.  Readium has implemented support for LCP, which will be available from the Readium repos.  Other DRM flavours, such as Sony DADC and Adobe ACS, can be used with Readium via vendor-specific implementations which are integrated with the readium-sdk core.
+
+#### ReadiumJS
+
+ReadiumJS allows developers to create browser-based EPUB reading systems that can be used by end-users across many different platforms.  ReadiumJS does not support any traditional DRM methods (though content-specific solutions such as watermarking are of course feasible). As pure JavaScript, ReadiumJS allows developers to use the base Readium implementations or to extend those implementations as they see fit.
+
+###  Readium SDK
+
+Readium SDK is consists of three major parts:
+* readium-sdk
+* readium-shared-js
+* SDKLauncher-*
+
+The diagram below illustrates the high-level relationship of the parts of the architecture.
