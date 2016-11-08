@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/jekyll/update/2016/10/31/welcome-to-jekyll.html">
-  <title>Welcome to Jekyll!</title>
-  <meta name="description" content="You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different wa...">
+  <link rel="canonical" href="http://localhost:4000/overview/2016/11/08/readium-sdk.html">
+  <title>Overview of Readium SDK</title>
+  <meta name="description" content="Readium SDK consists of three major parts:">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -64,7 +64,7 @@
         <ul class="menu nav navbar-nav">
           
             
-             <li class="leaf"><a class="page-link" href="/about/">About</a></li>
+             <li class="first expanded dropdown"><a class="page-link" href="/about/">About</a></li>
             
           
             
@@ -90,7 +90,7 @@
     <ol class="breadcrumb">
       <li><a href="http://readium.org">Home</a></li>
       <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Welcome to Jekyll!</li>
+      <li class="active">Overview of Readium SDK</li>
     </ol>
   </div>
 </div>
@@ -100,25 +100,65 @@
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Welcome to Jekyll!</h1>
-          <p class="post-meta"><time datetime="2016-10-31T11:02:41+01:00" itemprop="datePublished">Oct 31, 2016</time></p>
+          <h1 class="post-title"  itemprop="name headline">Overview of Readium SDK</h1>
+          <p class="post-meta"><time datetime="2016-11-08T11:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
         </header>
+        <hr>
 
         <div class="post-content" itemprop="articleBody">
-          <p>You’ll find this post in your <code class="highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+          <p>Readium SDK consists of three major parts:</p>
 
-<p>To add new posts, simply add a file in the <code class="highlighter-rouge">_posts</code> directory that follows the convention <code class="highlighter-rouge">YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<ul>
+  <li>readium-sdk</li>
+  <li>Readium-shared-js</li>
+  <li>SDKLauncher-*
+The diagram below illustrates the high-level relationship of the parts of the architecture.</li>
+</ul>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<p><img src="/assets/logos/readium-sdk.png" alt="readium-sdk" /></p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<h3 id="readium-sdk">readium-sdk</h3>
 
-<p>Check out the <a href="http://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<p>This is is the Core C++ code that manages the EPUB package, metadata, navigating and fetching resources and so on. The Core is platform-independent. In addition to the C++ core, there are also platform-dependent code layers that provide the interfaces to the platform-specific language layers:</p>
 
+<ul>
+  <li>iOS and OSX: There is no interface layer since Objective-C can call C++ directly. However, there is an interface layer (in Objective-C) called RDServices
+Android: This is the Java/C JNI layer.</li>
+  <li>Windows:
+    <ul>
+      <li>MFC: There is no interface layer as MFC can call the C++ core directly</li>
+      <li>RT: As Windows RT framework-based code is managed code, there is a C#/C++ layer</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="readium-shared-js">readium-shared-js</h3>
+
+<p>This layer, as its name implies, is pure JavaScript. It provides the interfaces and services between the application layer (in Objective-C, C++, Java or C#) and the Core as well as the web-browser engine instance. This layer is shared across all platforms and sub-projects, including both ReadiumJS sub-projects and all SDK-based applications. It manages messaging between the native layers as well as providing the management of views and other facilities of the browser engine.</p>
+
+<h3 id="sdklauncher-">SDKLauncher-*</h3>
+
+<p>These are platform-specific applications that facilitate testing of the rest of the SDK as well as providing a rudimentary demonstration of how to integrate native applications with the SDK. They are deliberately rather limited and crude since it is not the intent of Readium to compete with its own members, many of whose value proposition is integrating the SDK into their sophisticated applications and workflows.</p>
+
+<p>The platforms supported by Readium SDK (as of summer 2015) are</p>
+
+<ul>
+  <li>iOS 7 and above</li>
+  <li>Android 4.x and above</li>
+  <li>OSX 10.7 and above</li>
+  <li>Windows 7 and 8
+    <ul>
+      <li>MFC framework</li>
+    </ul>
+  </li>
+  <li>Windows 8 and 10
+    <ul>
+      <li>RT framework</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Of course, developers are welcome to tackle porting to and integration with other platforms, but the above are the only platforms against which the Readium SDK is validated and for which Launchers exist.</p>
 
         </div>
       </article>
