@@ -14,7 +14,7 @@ There are four major parts to the LCP workflow:
 
 The diagram below illustrates a high-level view of a LCP-enabled workflow.
 
-![readium-lcp](/assets/logos/readium-lcp.png)
+![readium-lcp](/assets/images/readium-lcp.png)
 
 ### LCP Server
 

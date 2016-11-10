@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2016-11-08T16:21:42+01:00</updated><id>http://localhost:4000//</id><title type="html">Readium Projects</title><subtitle>The Readium Projects primary goal is to provide rock-solid,  performant building blocks and applications for EPUB3 publications.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2016-11-10T10:25:47+01:00</updated><id>http://localhost:4000//</id><title type="html">Readium Projects</title><subtitle>The Readium Projects primary goal is to provide rock-solid,  performant building blocks and applications for EPUB3 publications.
 </subtitle><entry><title type="html">Contributing</title><link href="http://localhost:4000/contributing/2016/11/08/contributing.html" rel="alternate" type="text/html" title="Contributing" /><published>2016-11-08T15:59:00+01:00</published><updated>2016-11-08T15:59:00+01:00</updated><id>http://localhost:4000/contributing/2016/11/08/contributing</id><content type="html" xml:base="http://localhost:4000/contributing/2016/11/08/contributing.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;As an open-source project, the Readium Foundation welcomes contributions from everyone - from individuals, groups and corporations. The best way to get started with Readium is to read through the introductory materials on this site, subscribe to the mailing list and, of course, get the source code and start spelunking through it.&lt;/p&gt;
@@ -185,7 +185,7 @@ During meetings, we use the “concall” channel to post links, etc. Other time
 
 &lt;p&gt;The diagram below illustrates a high-level view of a LCP-enabled workflow.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/logos/readium-lcp.png&quot; alt=&quot;readium-lcp&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/readium-lcp.png&quot; alt=&quot;readium-lcp&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;lcp-server&quot;&gt;LCP Server&lt;/h3&gt;
 
@@ -209,7 +209,7 @@ During meetings, we use the “concall” channel to post links, etc. Other time
 
 &lt;p&gt;The Chrome Extension and the CloudReader share approximately 95% of their code, the primary difference is where their EPUB “library” is located and how they fetch EPUB resources. The diagram below illustrates the major aspects of their architectures.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/logos/readium-js.png&quot; alt=&quot;readium-js&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/readium-js.png&quot; alt=&quot;readium-js&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;readium-chrome-extension-rce&quot;&gt;Readium Chrome Extension (RCE)&lt;/h3&gt;
 
@@ -238,7 +238,7 @@ During meetings, we use the “concall” channel to post links, etc. Other time
 The diagram below illustrates the high-level relationship of the parts of the architecture.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/logos/readium-sdk.png&quot; alt=&quot;readium-sdk&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/readium-sdk.png&quot; alt=&quot;readium-sdk&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;readium-sdk&quot;&gt;readium-sdk&lt;/h3&gt;
 

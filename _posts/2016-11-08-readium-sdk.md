@@ -12,7 +12,7 @@ Readium SDK consists of three major parts:
 - SDKLauncher-*
 The diagram below illustrates the high-level relationship of the parts of the architecture.
 
-![readium-sdk](/assets/logos/readium-sdk.png)
+![readium-sdk](/assets/images/readium-sdk.png)
 
 ### readium-sdk
 

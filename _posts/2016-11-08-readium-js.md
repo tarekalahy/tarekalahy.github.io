@@ -14,7 +14,7 @@ Readium JS comprises two sub-projects, Readium Chrome Extension and the Readium 
 The Chrome Extension and the CloudReader share approximately 95% of their code, the primary difference is where their EPUB "library" is located and how they fetch EPUB resources. The diagram below illustrates the major aspects of their architectures.
 
 
-![readium-js](/assets/logos/readium-js.png)
+![readium-js](/assets/images/readium-js.png)
 
 
 ### Readium Chrome Extension (RCE)
