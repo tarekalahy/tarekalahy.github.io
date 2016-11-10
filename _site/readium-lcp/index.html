@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/contributing/2016/11/08/contributing.html">
-  <title>Contributing</title>
-  <meta name="description" content="Introduction">
+  <link rel="canonical" href="http://localhost:4000/readium-lcp/">
+  <title>Overview of Readium LCP</title>
+  <meta name="description" content="There are four major parts to the LCP workflow:">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -62,19 +62,29 @@
       <nav role="navigation">
         
         <ul class="menu nav navbar-nav">
-          
-            
-             <li class="first expanded dropdown"><a class="page-link" href="/about/">About</a></li>
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
+
+<!--             <li class="first expanded dropdown"><a class="page-link" href=""></a></li> -->
+
+              
+
+              <li class="first expanded dropdown">
+                <a href="/membership" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">About <span class="caret"></span></a>
+                  
+        <ul class="dropdown-menu">
+              <li class="first leaf">
+                <a href="/goals/">Project Goals</a>
+              </li>
+              <li class="leaf">
+                <a href="/applications/">Applications Based on Readium</a>
+                    </li>
+                  </ul>
+              </li>
+
+              <li class="first leaf">
+                <a href="/table-of-contents/">Table Of Contents</a>
+              </li>
+
+
         </ul>
       </nav>
     </div>
@@ -90,7 +100,7 @@
     <ol class="breadcrumb">
       <li><a href="http://readium.org">Home</a></li>
       <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Contributing</li>
+      <li class="active">Overview of Readium LCP</li>
     </ol>
   </div>
 </div>
@@ -100,87 +110,38 @@
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Contributing</h1>
-          <p class="post-meta"><time datetime="2016-11-08T15:59:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
+          <h1 class="post-title"  itemprop="name headline">Overview of Readium LCP</h1>
+          <p class="post-meta"><time datetime="2016-11-08T13:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
         </header>
         <hr>
 
         <div class="post-content" itemprop="articleBody">
-          <h2 id="introduction">Introduction</h2>
-
-<p>As an open-source project, the Readium Foundation welcomes contributions from everyone - from individuals, groups and corporations. The best way to get started with Readium is to read through the introductory materials on this site, subscribe to the mailing list and, of course, get the source code and start spelunking through it.</p>
-
-<p>An important note to bear in mind is that YOU are the Readium team. Readium has no “dedicated team”. Other than a consultant or two and a couple of part-time employees, everything in Readium is done by the Readium contributors - some employed by Readium Foundation members, some simply individual contributors.</p>
-
-<h2 id="project-communication">Project Communication</h2>
-
-<h3 id="mailing-list">Mailing List</h3>
-
-<p>There is an active mailing list for the Readium projects. To join, simply send mail to <a href="rkwright@readium.org">Ric Wright</a>, requesting access. Alternatively, visit the <a href="https://groups.google.com/forum/?fromgroups#!forum/readium-dev">Google Readium mailing-list</a> page (where you can also browse the archives) and request access.</p>
-
-<h3 id="the-weekly-meetings">The Weekly Meetings</h3>
-
-<p>There are three regular Readium Meetings each week:</p>
+          <p>There are four major parts to the LCP workflow:</p>
 
 <ul>
-  <li>Readium-1 Engineering:	Tuesdays at 16.00h UTC,</li>
-  <li>Readium-2 Engineering:	Wednesdays at 16.00h UTC,</li>
-  <li>Readium Triage/Planning:	Thursdays at 16.00h UTC.</li>
+  <li>The server, which packages the books provided by the publisher,</li>
+  <li>The client code which manages the user’s authentication and opens and decrypts the book,</li>
+  <li>The certificate authority, provides the necessary certificates for the packaging code,</li>
+  <li>The infrastructure which manages the storing of the packaged books, handling user transactions and the download of books to the user.</li>
 </ul>
 
-<p><em>Note:  The meetings are at 1600 UTC during the summer (in daylight savings) and 1700 UTC in the winter (non-daylight savings).</em></p>
+<p>The diagram below illustrates a high-level view of a LCP-enabled workflow.</p>
 
-<p>All three meetings are hosted in GoToMeeting with the same call-in info:</p>
+<p><img src="/assets/images/readium-lcp.png" alt="readium-lcp" /></p>
 
-<ul>
-  <li>
-    <p>Access Code: 334-772-733,</p>
-  </li>
-  <li>
-    <p>On the web, click <a href="https://global.gotomeeting.com/join/334772733">here</a> or call in by phone:</p>
-  </li>
-</ul>
+<h3 id="lcp-server">LCP Server</h3>
 
-<p><img src="/assets/others/phones.png" alt="phones" /></p>
+<p>This is the server which encrypts and packages a raw EPUB. The server can also take an exploded EPUB contents and package the contents, encrypting some parts of it. The server has been written in the GO language and is available from the Readium github repository.</p>
 
-<ul>
-  <li><strong>Use your microphone and speakers (VoIP) - a headset is recommended.</strong></li>
-</ul>
+<h3 id="lcp-client">LCP Client</h3>
 
-<p>An invitation to each meeting and a separate agenda for each meeting and all the login and call-in info is sent out to the readium-dev mailing list each week.</p>
+<p>This is the piece which reads the necessary information from the encrypted EPUB and decrypts the encrypted portions of the EPUB and provides them to the Readium rendering module. This decryption is done on-the-fly so that the decrypted contents are never on disk where they might be sniffed and/or extracted.</p>
 
-<h3 id="slack---real-time-chat">Slack - Real-time Chat</h3>
+<p>In addition to the basic decryption of the EPUB, there are also several steps required to authenticate the user, obtain and/or store the pass-phrase and so on. These are normally specific to the vendor implementing the Reading System based on the Readium SDK. The Readium SDK does provide some facilities to enable these workflows, but much of the implementation is vendor-specific and outside the SDK itself.</p>
 
-<p>The Readium Dev group uses Slack for real-time chats.</p>
+<h3 id="server-infrastructure">Server Infrastructure</h3>
 
-<p>Head here to get an invite:
-<a href="http://readium-slack.herokuapp.com">http://readium-slack.herokuapp.com</a></p>
-
-<p>The actual Readium chat room is here:
-<a href="https://readium.slack.com">https://readium.slack.com</a></p>
-
-<p>(several channels in there, including “sdk”, “concall”, etc.)
-During meetings, we use the “concall” channel to post links, etc. Other times, the “general” channel is most often used.</p>
-
-<h3 id="face-to-face-meetings">Face to Face Meetings</h3>
-
-<p>Several times a year (it varies) we try to arrange a face-to-face meeting of the developers and contributors. These usually but not always coicide with Readium membership meetings and/or major eBook conferences like Book Expo America, etc.</p>
-
-<h3 id="meeting-archives">Meeting Archives</h3>
-
-<p>The agenda and notes from all the meetings are archived in the Readium Google doc tree. Access to all the archives can be found <a href="https://drive.google.com/drive/folders/0BzaNaBNAB6FjRmFocHotbV9nMFU?hl=en">here</a>.</p>
-
-<h3 id="the-readiumjs-meeting">The ReadiumJS Meeting</h3>
-
-<p>The ReadiumJS meeting is focused primarily on the Readium Chrome Extension and CloudReader development. However, since the JS and SDK sides share the readium-shared-js layer, there is often a little bit of overlap.</p>
-
-<h3 id="the-readium-sdk-meeting">The Readium SDK Meeting</h3>
-
-<p>The Readium SDK meeting is of course focused primarily on the SDK development. However, there is often a little bit of overlap with ReadiumJS. The SDK meeting also covers some of the DRM-related development.</p>
-
-<h3 id="the-triageplanning-meeting">The Triage/Planning Meeting</h3>
-
-<p>The Thursday meeting varies in its content, but tends to be broader in scope than the JS or SDK engineering meetings. Sometimes if focuses on reviewing the open issues or some particular topic (e.g. user interface changes to the Chrome Extension, etc.). Other times, the meeting focuses on planning for one or more facets of the project over the near or medium term. Longer term planning tends to be held at the membership and board level.</p>
+<p>In addition to the server which packages the books for deployment and the DRM-enabled SDK which decrypts the books for reading, there is also some necessary server-side infrastructure needed to support the servers by providing certificates for the encryption process. In order for books to be shared across reading systems, and especially across different Reading Systems, there needs to be a central “certificate authority (CA)” which provides the necessary certificates.</p>
 
         </div>
       </article>

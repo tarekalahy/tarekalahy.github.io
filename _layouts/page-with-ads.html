@@ -4,12 +4,10 @@ layout: default
 <div class="breadcrumbs">
   <div class="container">
     <ol class="breadcrumb">
-      <li><a href="http://readium.org">Home</a></li>
-      <li class="active">{{ page.title | escape }}</li>
+      <li><a href="/">{{ page.title | escape }}</a></li>
     </ol>
   </div>
 </div>
-
 
 <div class="main-container container">
   <div class="row">
@@ -20,6 +18,8 @@ layout: default
         </header>
 
         {{ content }}
+
+        {% include ad-footer.html %}
 
       </article>
     </section>  

@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/overview/2016/11/08/readium-sdk.html">
-  <title>Overview of Readium SDK</title>
-  <meta name="description" content="Readium SDK consists of three major parts:">
+  <link rel="canonical" href="http://localhost:4000/table-of-contents/">
+  <title>Table Of Contents</title>
+  <meta name="description" content="The Readium Projects primary goal is to provide rock-solid, performant building blocks and applications for EPUB3 publications.">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -62,19 +62,29 @@
       <nav role="navigation">
         
         <ul class="menu nav navbar-nav">
-          
-            
-             <li class="first expanded dropdown"><a class="page-link" href="/about/">About</a></li>
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
+
+<!--             <li class="first expanded dropdown"><a class="page-link" href=""></a></li> -->
+
+              
+
+              <li class="first expanded dropdown">
+                <a href="/membership" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">About <span class="caret"></span></a>
+                  
+        <ul class="dropdown-menu">
+              <li class="first leaf">
+                <a href="/goals/">Project Goals</a>
+              </li>
+              <li class="leaf">
+                <a href="/applications/">Applications Based on Readium</a>
+                    </li>
+                  </ul>
+              </li>
+
+              <li class="first leaf">
+                <a href="/table-of-contents/">Table Of Contents</a>
+              </li>
+
+
         </ul>
       </nav>
     </div>
@@ -88,9 +98,7 @@
       <div class="breadcrumbs">
   <div class="container">
     <ol class="breadcrumb">
-      <li><a href="http://readium.org">Home</a></li>
-      <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Overview of Readium SDK</li>
+      <li><a href="/">Table Of Contents</a></li>
     </ol>
   </div>
 </div>
@@ -98,69 +106,33 @@
 <div class="main-container container">
   <div class="row">
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-      <article itemscope itemtype="http://schema.org/BlogPosting">
+      <article>
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Overview of Readium SDK</h1>
-          <p class="post-meta"><time datetime="2016-11-08T11:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
+          <h1 class="post-title">Table Of Contents</h1>
         </header>
+
+        <ul>
+  <li>Prologue</li>
+  <li>Act 1
+    <ul>
+      <li>Scene 1</li>
+      <li>Scene 2</li>
+      <li>Scene 3</li>
+    </ul>
+  </li>
+  <li>Act 2</li>
+  <li>Act 3</li>
+  <li>Act 4</li>
+</ul>
+
+
         <hr>
 
-        <div class="post-content" itemprop="articleBody">
-          <p>Readium SDK consists of three major parts:</p>
+<p>Readium is an open-source project and extends its thanks to the following organizations for supporting our open-source development.</p> 
+<br />
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img alt="" src="/assets/logos/webstorm-logo.png" style="width: 64px; height: 64px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img alt="" src="/assets/logos/webstorm-logo.png" style="width: 64px; height: 64px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img alt="" src="/assets/logos/atlassian-logo.jpg" style="width: 107px; height: 64px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img alt="" src="/assets/logos/visualstudio-logo.jpg"></p>
+<p>&nbsp; &nbsp;<a href="https://www.jetbrains.com/webstorm/">JetBrains WebStorm</a>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="http://www.jetbrains.com/objc/">JetBrains AppCode</a><a href="http://www.jetbrains.com/objc/"></a>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="https://www.sourcetreeapp.com">Atlassian SourceTree</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="https://www.visualstudio.com/en-us/visual-studio-homepage-vs.aspx">Visual Studio 2015</a></p>
 
-<ul>
-  <li>readium-sdk</li>
-  <li>Readium-shared-js</li>
-  <li>SDKLauncher-*
-The diagram below illustrates the high-level relationship of the parts of the architecture.</li>
-</ul>
-
-<p><img src="/assets/images/readium-sdk.png" alt="readium-sdk" /></p>
-
-<h3 id="readium-sdk">readium-sdk</h3>
-
-<p>This is is the Core C++ code that manages the EPUB package, metadata, navigating and fetching resources and so on. The Core is platform-independent. In addition to the C++ core, there are also platform-dependent code layers that provide the interfaces to the platform-specific language layers:</p>
-
-<ul>
-  <li>iOS and OSX: There is no interface layer since Objective-C can call C++ directly. However, there is an interface layer (in Objective-C) called RDServices
-Android: This is the Java/C JNI layer.</li>
-  <li>Windows:
-    <ul>
-      <li>MFC: There is no interface layer as MFC can call the C++ core directly</li>
-      <li>RT: As Windows RT framework-based code is managed code, there is a C#/C++ layer</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="readium-shared-js">readium-shared-js</h3>
-
-<p>This layer, as its name implies, is pure JavaScript. It provides the interfaces and services between the application layer (in Objective-C, C++, Java or C#) and the Core as well as the web-browser engine instance. This layer is shared across all platforms and sub-projects, including both ReadiumJS sub-projects and all SDK-based applications. It manages messaging between the native layers as well as providing the management of views and other facilities of the browser engine.</p>
-
-<h3 id="sdklauncher-">SDKLauncher-*</h3>
-
-<p>These are platform-specific applications that facilitate testing of the rest of the SDK as well as providing a rudimentary demonstration of how to integrate native applications with the SDK. They are deliberately rather limited and crude since it is not the intent of Readium to compete with its own members, many of whose value proposition is integrating the SDK into their sophisticated applications and workflows.</p>
-
-<p>The platforms supported by Readium SDK (as of summer 2015) are</p>
-
-<ul>
-  <li>iOS 7 and above</li>
-  <li>Android 4.x and above</li>
-  <li>OSX 10.7 and above</li>
-  <li>Windows 7 and 8
-    <ul>
-      <li>MFC framework</li>
-    </ul>
-  </li>
-  <li>Windows 8 and 10
-    <ul>
-      <li>RT framework</li>
-    </ul>
-  </li>
-</ul>
-
-<p>Of course, developers are welcome to tackle porting to and integration with other platforms, but the above are the only platforms against which the Readium SDK is validated and for which Launchers exist.</p>
-
-        </div>
       </article>
     </section>  
   </div>

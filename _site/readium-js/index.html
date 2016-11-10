@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/overview/2016/11/08/readium-lcp.html">
-  <title>Overview of Readium LCP</title>
-  <meta name="description" content="There are four major parts to the LCP workflow:">
+  <link rel="canonical" href="http://localhost:4000/readium-js/">
+  <title>Overview of Readium JS</title>
+  <meta name="description" content="Readium JS comprises two sub-projects, Readium Chrome Extension and the Readium CloudReader. Both consist of three major pieces:">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -62,19 +62,29 @@
       <nav role="navigation">
         
         <ul class="menu nav navbar-nav">
-          
-            
-             <li class="first expanded dropdown"><a class="page-link" href="/about/">About</a></li>
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
+
+<!--             <li class="first expanded dropdown"><a class="page-link" href=""></a></li> -->
+
+              
+
+              <li class="first expanded dropdown">
+                <a href="/membership" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">About <span class="caret"></span></a>
+                  
+        <ul class="dropdown-menu">
+              <li class="first leaf">
+                <a href="/goals/">Project Goals</a>
+              </li>
+              <li class="leaf">
+                <a href="/applications/">Applications Based on Readium</a>
+                    </li>
+                  </ul>
+              </li>
+
+              <li class="first leaf">
+                <a href="/table-of-contents/">Table Of Contents</a>
+              </li>
+
+
         </ul>
       </nav>
     </div>
@@ -90,7 +100,7 @@
     <ol class="breadcrumb">
       <li><a href="http://readium.org">Home</a></li>
       <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Overview of Readium LCP</li>
+      <li class="active">Overview of Readium JS</li>
     </ol>
   </div>
 </div>
@@ -100,38 +110,43 @@
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Overview of Readium LCP</h1>
+          <h1 class="post-title"  itemprop="name headline">Overview of Readium JS</h1>
           <p class="post-meta"><time datetime="2016-11-08T13:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
         </header>
         <hr>
 
         <div class="post-content" itemprop="articleBody">
-          <p>There are four major parts to the LCP workflow:</p>
+          <p>Readium JS comprises two sub-projects, Readium Chrome Extension and the Readium CloudReader. Both consist of three major pieces:</p>
 
 <ul>
-  <li>The server, which packages the books provided by the publisher,</li>
-  <li>The client code which manages the user’s authentication and opens and decrypts the book,</li>
-  <li>The certificate authority, provides the necessary certificates for the packaging code,</li>
-  <li>The infrastructure which manages the storing of the packaged books, handling user transactions and the download of books to the user.</li>
+  <li>readium-js, which is the core (equivalent to the C++ Core in the SDK) and provides basic services, manages the EPUB package, metadata, navigating and fetching resources and so on,</li>
+  <li>readium-shared-js: This is exactly the same code as used in the SDK implementation (hence the ‘shared’ name),</li>
+  <li>readium-js-viewer: This is the application layer which manages the user-interface.</li>
 </ul>
 
-<p>The diagram below illustrates a high-level view of a LCP-enabled workflow.</p>
+<p>The Chrome Extension and the CloudReader share approximately 95% of their code, the primary difference is where their EPUB “library” is located and how they fetch EPUB resources. The diagram below illustrates the major aspects of their architectures.</p>
 
-<p><img src="/assets/images/readium-lcp.png" alt="readium-lcp" /></p>
+<p><img src="/assets/images/readium-js.png" alt="readium-js" /></p>
 
-<h3 id="lcp-server">LCP Server</h3>
+<h3 id="readium-chrome-extension-rce">Readium Chrome Extension (RCE)</h3>
 
-<p>This is the server which encrypts and packages a raw EPUB. The server can also take an exploded EPUB contents and package the contents, encrypting some parts of it. The server has been written in the GO language and is available from the Readium github repository.</p>
+<p>This sub-project consists of an extension to Google Chrome. It is a full-fledged, functional EPUB reading system. It supports virtually all of the EPUB 3.0.1 specification. Unlike the Readium SDK Launchers, RCE is a relatively polished, full-featured application. It is under constant development to provide more features and capabilities. It only works with Google Chrome since it leverages the built-in capabilities provided by the Chrome framework. It imports the user’s books into a private file-system on the user’s computer.</p>
 
-<h3 id="lcp-client">LCP Client</h3>
+<h3 id="readium-cloudreader">Readium CloudReader</h3>
 
-<p>This is the piece which reads the necessary information from the encrypted EPUB and decrypts the encrypted portions of the EPUB and provides them to the Readium rendering module. This decryption is done on-the-fly so that the decrypted contents are never on disk where they might be sniffed and/or extracted.</p>
+<p>The CloudReader is very similar to the Chrome extension – and they share almost all their code. The key difference is that RCE is tightly wedded to Google Chrome and therefor works only where Chrome is available. The CloudReader, on the other hand, runs in almost all browsers. Another distinction is while RCS loads the user’s books into a private filesystem managed by Chrome on the user’s computer, the CloudReader loads its books from a “bookshelf” located somewhere on the web. The CloudReader is downloaded each time the user creates a new instance of the CloudReader. The bookshelf and the CloudReader’s deployed location are typically the same, but do not need to be so.</p>
 
-<p>In addition to the basic decryption of the EPUB, there are also several steps required to authenticate the user, obtain and/or store the pass-phrase and so on. These are normally specific to the vendor implementing the Reading System based on the Readium SDK. The Readium SDK does provide some facilities to enable these workflows, but much of the implementation is vendor-specific and outside the SDK itself.</p>
+<p>The only supported platform for RCE is of course Google Chrome. It is validated (tested) on Windows (7 and 8), OSX, and ChromeOS (ChromeBook). It may work on other platforms but we do not test it elsewhere. Chrome apps are not supported on iOS or Android.</p>
 
-<h3 id="server-infrastructure">Server Infrastructure</h3>
+<p>The CloudReader is currently validated against the latest version of all major browsers, including:</p>
 
-<p>In addition to the server which packages the books for deployment and the DRM-enabled SDK which decrypts the books for reading, there is also some necessary server-side infrastructure needed to support the servers by providing certificates for the encryption process. In order for books to be shared across reading systems, and especially across different Reading Systems, there needs to be a central “certificate authority (CA)” which provides the necessary certificates.</p>
+<ul>
+  <li>Safari (OSX and iOS only),</li>
+  <li>Firefox (iOS, OSX, Windows, Android),</li>
+  <li>Chrome (iOS, OSX, Windows, Android).</li>
+</ul>
+
+<p>Again, the CloudReader may (and usually does) run properly on other browser/platform combinations, but Readium does not validate against them.</p>
 
         </div>
       </article>

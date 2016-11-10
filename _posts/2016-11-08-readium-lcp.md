@@ -3,6 +3,7 @@ layout: post
 title:  "Overview of Readium LCP"
 date:   2016-11-08 13:30:00 +0100
 categories: overview
+permalink: /readium-lcp/
 ---
 
 There are four major parts to the LCP workflow:

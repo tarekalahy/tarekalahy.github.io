@@ -23,9 +23,9 @@ layout: default
       </article>
 
       <hr>
-      <h2>Table of Contents</h2>
+      <h2>Latest Posts</h2>
       <ul class="post-list">
-        {% for post in site.posts %}
+        {% for post in site.posts limit:2 %}
           <li>
             <h4>
               <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>

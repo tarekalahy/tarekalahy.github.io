@@ -3,6 +3,7 @@ layout: post
 title:  "Contributing"
 date:   2016-11-08 15:59:00 +0100
 categories: contributing
+permalink: /contributing/
 ---
 ## Introduction
 

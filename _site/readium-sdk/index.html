@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/overview/2016/11/08/readium-js.html">
-  <title>Overview of Readium JS</title>
-  <meta name="description" content="Readium JS comprises two sub-projects, Readium Chrome Extension and the Readium CloudReader. Both consist of three major pieces:">
+  <link rel="canonical" href="http://localhost:4000/readium-sdk/">
+  <title>Overview of Readium SDK</title>
+  <meta name="description" content="Readium SDK consists of three major parts:">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -62,19 +62,29 @@
       <nav role="navigation">
         
         <ul class="menu nav navbar-nav">
-          
-            
-             <li class="first expanded dropdown"><a class="page-link" href="/about/">About</a></li>
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
+
+<!--             <li class="first expanded dropdown"><a class="page-link" href=""></a></li> -->
+
+              
+
+              <li class="first expanded dropdown">
+                <a href="/membership" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">About <span class="caret"></span></a>
+                  
+        <ul class="dropdown-menu">
+              <li class="first leaf">
+                <a href="/goals/">Project Goals</a>
+              </li>
+              <li class="leaf">
+                <a href="/applications/">Applications Based on Readium</a>
+                    </li>
+                  </ul>
+              </li>
+
+              <li class="first leaf">
+                <a href="/table-of-contents/">Table Of Contents</a>
+              </li>
+
+
         </ul>
       </nav>
     </div>
@@ -90,7 +100,7 @@
     <ol class="breadcrumb">
       <li><a href="http://readium.org">Home</a></li>
       <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Overview of Readium JS</li>
+      <li class="active">Overview of Readium SDK</li>
     </ol>
   </div>
 </div>
@@ -100,43 +110,65 @@
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Overview of Readium JS</h1>
-          <p class="post-meta"><time datetime="2016-11-08T13:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
+          <h1 class="post-title"  itemprop="name headline">Overview of Readium SDK</h1>
+          <p class="post-meta"><time datetime="2016-11-08T11:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
         </header>
         <hr>
 
         <div class="post-content" itemprop="articleBody">
-          <p>Readium JS comprises two sub-projects, Readium Chrome Extension and the Readium CloudReader. Both consist of three major pieces:</p>
+          <p>Readium SDK consists of three major parts:</p>
 
 <ul>
-  <li>readium-js, which is the core (equivalent to the C++ Core in the SDK) and provides basic services, manages the EPUB package, metadata, navigating and fetching resources and so on,</li>
-  <li>readium-shared-js: This is exactly the same code as used in the SDK implementation (hence the ‘shared’ name),</li>
-  <li>readium-js-viewer: This is the application layer which manages the user-interface.</li>
+  <li>readium-sdk</li>
+  <li>Readium-shared-js</li>
+  <li>SDKLauncher-*
+The diagram below illustrates the high-level relationship of the parts of the architecture.</li>
 </ul>
 
-<p>The Chrome Extension and the CloudReader share approximately 95% of their code, the primary difference is where their EPUB “library” is located and how they fetch EPUB resources. The diagram below illustrates the major aspects of their architectures.</p>
+<p><img src="/assets/images/readium-sdk.png" alt="readium-sdk" /></p>
 
-<p><img src="/assets/images/readium-js.png" alt="readium-js" /></p>
+<h3 id="readium-sdk">readium-sdk</h3>
 
-<h3 id="readium-chrome-extension-rce">Readium Chrome Extension (RCE)</h3>
-
-<p>This sub-project consists of an extension to Google Chrome. It is a full-fledged, functional EPUB reading system. It supports virtually all of the EPUB 3.0.1 specification. Unlike the Readium SDK Launchers, RCE is a relatively polished, full-featured application. It is under constant development to provide more features and capabilities. It only works with Google Chrome since it leverages the built-in capabilities provided by the Chrome framework. It imports the user’s books into a private file-system on the user’s computer.</p>
-
-<h3 id="readium-cloudreader">Readium CloudReader</h3>
-
-<p>The CloudReader is very similar to the Chrome extension – and they share almost all their code. The key difference is that RCE is tightly wedded to Google Chrome and therefor works only where Chrome is available. The CloudReader, on the other hand, runs in almost all browsers. Another distinction is while RCS loads the user’s books into a private filesystem managed by Chrome on the user’s computer, the CloudReader loads its books from a “bookshelf” located somewhere on the web. The CloudReader is downloaded each time the user creates a new instance of the CloudReader. The bookshelf and the CloudReader’s deployed location are typically the same, but do not need to be so.</p>
-
-<p>The only supported platform for RCE is of course Google Chrome. It is validated (tested) on Windows (7 and 8), OSX, and ChromeOS (ChromeBook). It may work on other platforms but we do not test it elsewhere. Chrome apps are not supported on iOS or Android.</p>
-
-<p>The CloudReader is currently validated against the latest version of all major browsers, including:</p>
+<p>This is is the Core C++ code that manages the EPUB package, metadata, navigating and fetching resources and so on. The Core is platform-independent. In addition to the C++ core, there are also platform-dependent code layers that provide the interfaces to the platform-specific language layers:</p>
 
 <ul>
-  <li>Safari (OSX and iOS only),</li>
-  <li>Firefox (iOS, OSX, Windows, Android),</li>
-  <li>Chrome (iOS, OSX, Windows, Android).</li>
+  <li>iOS and OSX: There is no interface layer since Objective-C can call C++ directly. However, there is an interface layer (in Objective-C) called RDServices
+Android: This is the Java/C JNI layer.</li>
+  <li>Windows:
+    <ul>
+      <li>MFC: There is no interface layer as MFC can call the C++ core directly</li>
+      <li>RT: As Windows RT framework-based code is managed code, there is a C#/C++ layer</li>
+    </ul>
+  </li>
 </ul>
 
-<p>Again, the CloudReader may (and usually does) run properly on other browser/platform combinations, but Readium does not validate against them.</p>
+<h3 id="readium-shared-js">readium-shared-js</h3>
+
+<p>This layer, as its name implies, is pure JavaScript. It provides the interfaces and services between the application layer (in Objective-C, C++, Java or C#) and the Core as well as the web-browser engine instance. This layer is shared across all platforms and sub-projects, including both ReadiumJS sub-projects and all SDK-based applications. It manages messaging between the native layers as well as providing the management of views and other facilities of the browser engine.</p>
+
+<h3 id="sdklauncher-">SDKLauncher-*</h3>
+
+<p>These are platform-specific applications that facilitate testing of the rest of the SDK as well as providing a rudimentary demonstration of how to integrate native applications with the SDK. They are deliberately rather limited and crude since it is not the intent of Readium to compete with its own members, many of whose value proposition is integrating the SDK into their sophisticated applications and workflows.</p>
+
+<p>The platforms supported by Readium SDK (as of summer 2015) are</p>
+
+<ul>
+  <li>iOS 7 and above</li>
+  <li>Android 4.x and above</li>
+  <li>OSX 10.7 and above</li>
+  <li>Windows 7 and 8
+    <ul>
+      <li>MFC framework</li>
+    </ul>
+  </li>
+  <li>Windows 8 and 10
+    <ul>
+      <li>RT framework</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Of course, developers are welcome to tackle porting to and integration with other platforms, but the above are the only platforms against which the Readium SDK is validated and for which Launchers exist.</p>
 
         </div>
       </article>
