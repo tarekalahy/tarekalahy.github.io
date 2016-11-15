@@ -6,7 +6,15 @@ categories: overview
 permalink: /readium-lcp/
 ---
 
-There are four major parts to the LCP workflow:
+### Useful Links
+
+You can find the full Readium LCP Specifications here: [Readium LCP Specifications](/lcp-specs/).
+
+More informations about Readium LCP on the [EDRLab website](https://edrlab.org/edrlab/readium-lcp-principles/).
+
+### Introduction
+
+There are four major parts to the Readium LCP workflow:
 
 - The server, which packages the books provided by the publisher,
 - The client code which manages the user's authentication and opens and decrypts the book,

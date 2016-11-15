@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="canonical" href="http://localhost:4000/readium-lcp/">
-  <title>Overview of Readium LCP</title>
-  <meta name="description" content="Useful Links">
+  <link rel="canonical" href="http://localhost:4000/lcp-specs/">
+  <title>Readium LCP Specifications</title>
+  <meta name="description" content="Readium LCP (“Licensed Content Protection”) is an initiative to establish a vendor-neutral interoperable DRM (Digital Rights Management) ecosystem for eBooks...">
   <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
   <link rel="stylesheet" type="text/css" href="/css/date.css"/>
   <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
@@ -100,7 +100,7 @@
     <ol class="breadcrumb">
       <li><a href="http://readium.org">Home</a></li>
       <li><a href="/" class="active-trail">Readium Projects</a></li>
-      <li class="active">Overview of Readium LCP</li>
+      <li class="active">Readium LCP Specifications</li>
     </ol>
   </div>
 </div>
@@ -110,46 +110,39 @@
     <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
       <article itemscope itemtype="http://schema.org/BlogPosting">
         <header class="post-header">
-          <h1 class="post-title"  itemprop="name headline">Overview of Readium LCP</h1>
-          <p class="post-meta"><time datetime="2016-11-08T13:30:00+01:00" itemprop="datePublished">Nov 8, 2016</time></p>
+          <h1 class="post-title"  itemprop="name headline">Readium LCP Specifications</h1>
+          <p class="post-meta"><time datetime="2016-11-15T11:30:00+01:00" itemprop="datePublished">Nov 15, 2016</time></p>
         </header>
         <hr>
 
         <div class="post-content" itemprop="articleBody">
-          <h3 id="useful-links">Useful Links</h3>
+          <p>Readium LCP (“Licensed Content Protection”) is an initiative to establish a vendor-neutral interoperable DRM (Digital Rights Management) ecosystem for eBooks and other digital publications, with public specifications and open-source software.</p>
 
-<p>You can find the full Readium LCP Specifications here: <a href="/lcp-specs/">Readium LCP Specifications</a>.</p>
+<p>Readium LCP principles have already been used as the basis of several production solutions and has also helped advance Readium SDK’s core DRM architecture, which supports integration of a number of 3rd-party DRM solutions.</p>
 
-<p>More informations about Readium LCP on the <a href="https://edrlab.org/edrlab/readium-lcp-principles/">EDRLab website</a>.</p>
+<p>The interoperability of Readium LCP services will be guaranteed by EDRLab (European Digital Reading Lab), i.e. the Readium headquarter in Europe. For more information about how to join this open DRM ecosystem, please contact EDRLab (<a href="https://edrlab.org">https://edrlab.org</a>).</p>
 
-<h3 id="introduction">Introduction</h3>
+<h3 id="published-documents">Published documents</h3>
 
-<p>There are four major parts to the Readium LCP workflow:</p>
+<p><a href="http://readium.github.io/drm/lcp1-0.html">Readium Licensed Content Protection (LCP) 1.0</a> defines a standard License Document and an Encryption Profile for encrypting resources in EPUB 3 Publications, expressing rights and restrictions, and for securely delivering decryption keys to Reading Systems via licenses for specific Users. Readium LCP also defines a simple passphrase-based authentication method for Reading Systems to access encrypted resources and verify a license.</p>
 
-<ul>
-  <li>The server, which packages the books provided by the publisher,</li>
-  <li>The client code which manages the user’s authentication and opens and decrypts the book,</li>
-  <li>The certificate authority, provides the necessary certificates for the packaging code,</li>
-  <li>The infrastructure which manages the storing of the packaged books, handling user transactions and the download of books to the user.</li>
-</ul>
+<p>&gt; See also: <a href="https://github.com/readium/readium.github.io">GitHub repository</a></p>
 
-<p>The diagram below illustrates a high-level view of a LCP-enabled workflow.</p>
+<p><a href="http://readium.github.io/drm/lsd1-0.html">Readium License Status Document 1.0</a> defines a standard Status Document for representing the status of a DRM license along with interactions that might affect its status. These interactions put additional responsibilities on both Content Providers and Reading Systems. One of the primary objectives is to support lending in public libraries where a user may have the ability to renew a time-limited loan or cancel one before it expires.</p>
 
-<p><img src="/assets/images/readium-lcp.png" alt="readium-lcp" /></p>
+<p>&gt; See also: <a href="https://github.com/readium/readium.github.io">GitHub repository</a></p>
 
-<h3 id="lcp-server">LCP Server</h3>
+<h3 id="open-source-software">Open-source software</h3>
 
-<p>This is the server which encrypts and packages a raw EPUB. The server can also take an exploded EPUB contents and package the contents, encrypting some parts of it. The server has been written in the GO language and is available from the Readium github repository.</p>
+<p>The Readium repositories relative to Readium LCP are currently still private, as the core development team is working on providing a working testbed for Readium LCP deployments.</p>
 
-<h3 id="lcp-client">LCP Client</h3>
+<p>The Readium LCP Client library, written in C++, is very easy to deploy as a “content module” in a Reading System based on the Readium SDK. It’s code may be adapted to any other Reading System implementation.</p>
 
-<p>This is the piece which reads the necessary information from the encrypted EPUB and decrypts the encrypted portions of the EPUB and provides them to the Readium rendering module. This decryption is done on-the-fly so that the decrypted contents are never on disk where they might be sniffed and/or extracted.</p>
+<p>&gt; Download it on: <a href="https://github.com/readium/readium-lcp-client">GitHub repository</a></p>
 
-<p>In addition to the basic decryption of the EPUB, there are also several steps required to authenticate the user, obtain and/or store the pass-phrase and so on. These are normally specific to the vendor implementing the Reading System based on the Readium SDK. The Readium SDK does provide some facilities to enable these workflows, but much of the implementation is vendor-specific and outside the SDK itself.</p>
+<p>The multi-platform reference Readium LCP Server is written in Golang. It provides a command line utility for content encryption, a Readium LCP License Server and a License Status Server. The REST API allows for a seamless integration with front-end systems and offers immediate interaction with Readium LCP compliant Reading Systems.  </p>
 
-<h3 id="server-infrastructure">Server Infrastructure</h3>
-
-<p>In addition to the server which packages the books for deployment and the DRM-enabled SDK which decrypts the books for reading, there is also some necessary server-side infrastructure needed to support the servers by providing certificates for the encryption process. In order for books to be shared across reading systems, and especially across different Reading Systems, there needs to be a central “certificate authority (CA)” which provides the necessary certificates.</p>
+<p>&gt; Download it on: <a href="https://github.com/readium/readium-lcp-server">GitHub repository</a></p>
 
         </div>
       </article>
