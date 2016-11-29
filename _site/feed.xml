@@ -6,9 +6,2210 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Nov 2016 14:15:49 +0100</pubDate>
-    <lastBuildDate>Tue, 15 Nov 2016 14:15:49 +0100</lastBuildDate>
+    <pubDate>Tue, 29 Nov 2016 18:21:22 +0100</pubDate>
+    <lastBuildDate>Tue, 29 Nov 2016 18:21:22 +0100</lastBuildDate>
     <generator>Jekyll v3.3.0</generator>
+    
+      <item>
+        <title>Readium Content Protection (LCP) Specification 1.0</title>
+        <description>&lt;h2 id=&quot;overview&quot;&gt;1. Overview&lt;/h2&gt;
+
+&lt;h3 id=&quot;purpose-and-scope&quot;&gt;1.1 Purpose and Scope&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In order to deliver a Publication to a User with specific rights and restrictions, a Content Provider may want to encrypt the Publication’s Resources and associate them with a specific license.&lt;/p&gt;
+
+&lt;p&gt;This specification, Readium Licensed Content Protection (LCP), defines a standard License Document and an Encryption Profile for encrypting resources in EPUB 3 Publications, expressing rights and restrictions, and for securely delivering decryption keys to Reading Systems via licenses for specific Users.&lt;/p&gt;
+
+&lt;p&gt;Readium LCP also defines a simple passphrase-based authentication method for Reading Systems to access encrypted resources and verify a license.&lt;/p&gt;
+
+&lt;h2 id=&quot;terminology&quot;&gt;1.2. Terminology&lt;/h2&gt;
+
+&lt;h3 id=&quot;epub-terms&quot;&gt;EPUB terms&lt;/h3&gt;
+
+&lt;p&gt;This specification adopts &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#sec-gloss&quot;&gt;terms defined in the EPUB 3 family of specifications&lt;/a&gt;.  Important terms used include:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Publication&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A logical document entity consisting of a set of interrelated &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-publication-resource-cmt-or-foreign&quot;&gt;resources&lt;/a&gt; and packaged in an &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-container&quot;&gt;EPUB Container&lt;/a&gt;, as defined by the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#sibling-specs&quot;&gt;EPUB 3 specifications&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Publication Resource (or Resource)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A resource that contains content or instructions that contribute to the logic and rendering of the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;EPUB Publication&lt;/a&gt;. In the absence of this resource, the Publication might not render as intended by the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-author&quot;&gt;Author&lt;/a&gt;. Examples of Publication Resources include the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-package-document&quot;&gt;Package Document&lt;/a&gt;, &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-content-document-epub&quot;&gt;EPUB Content Document&lt;/a&gt;s, &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-stylesheet&quot;&gt;EPUB Style Sheets&lt;/a&gt;, audio, video, images, embedded fonts and scripts.&lt;/p&gt;
+
+&lt;p&gt;With the exception of the Package Document itself, Publication Resources must be listed in the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-manifest-elem&quot;&gt;manifest&lt;/a&gt; element from &lt;a href=&quot;#bookmark=id.m82bukfe51g1&quot;&gt;[Publications]&lt;/a&gt; and must be bundled in the EPUB container file unless specified otherwise in &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-resource-locations&quot;&gt;Publication Resource Locations&lt;/a&gt; from &lt;a href=&quot;#bookmark=id.m82bukfe51g1&quot;&gt;[Publications]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Examples of resources that are not Publication Resources include those identified by the Package Document &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-link-elem&quot;&gt;link&lt;/a&gt; element from &lt;a href=&quot;#bookmark=id.m82bukfe51g1&quot;&gt;[Publications]&lt;/a&gt; and those identified in outbound hyperlinks that resolve outside the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-container&quot;&gt;EPUB Container&lt;/a&gt; (e.g., referenced from an HTML5 a element href attribute).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Package Document&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-publication-resource-cmt-or-foreign&quot;&gt;Publication Resource&lt;/a&gt; carrying bibliographical and structural metadata about the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;EPUB Publication&lt;/a&gt;, as defined in &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-package-documents&quot;&gt;Package Documents&lt;/a&gt; from &lt;a href=&quot;#bookmark=id.m82bukfe51g1&quot;&gt;[Publications]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;EPUB Container (or Container)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The ZIP-based packaging and distribution format for &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;EPUB Publication&lt;/a&gt;s defined in &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;User&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An individual that consumes an &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;EPUB Publication&lt;/a&gt; using an &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-reading-system&quot;&gt;EPUB Reading System&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;EPUB Reading System (or Reading System)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A system that processes &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;EPUB Publications for presentation to a &lt;/a&gt;&lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-user&quot;&gt;User&lt;/a&gt;&lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt; in a manner conformant with the &lt;/a&gt;&lt;a href=&quot;http://www.idpf.org/epub/30/spec/#sibling-specs&quot;&gt;EPUB 3 specifications&lt;/a&gt;&lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-epub-publication&quot;&gt;.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;lcp-terms&quot;&gt;LCP terms&lt;/h3&gt;
+
+&lt;p&gt;The following terms are defined by this specification:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Protected Publication&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A Publication that has been protected according to this specification.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;License Authority&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The entity which operates the Readium LCP ecosystem.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;License Document&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Document that contains references to the various keys, links to related external resources, rights and restrictions that are applied to the Protected Publication, and user information.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Content Key&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Symmetric key used to encrypt the resources of the Protected Publication. In the License Document, this Content Key will be encrypted using the User Key.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;User Passphrase&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A string of text entered by the user that is used to generate the User Key.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;User Key&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A hash of the User Passphrase that is used to decrypt the Content Key and selected user information fields.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Encryption Profile&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A set of encryption algorithms used in a specific Protected Publication and associated Licence Document.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Content Provider (or Provider)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;An entity that delivers LCP licenses for Protected Publications to Users.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Provider Certificate&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A certificate that is included in the License Document to identify the Content Provider and validate the signature of the License Document.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Root Certificate&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A certificate that is embedded in the Reading System in order to confirm that the Provider Certificate is valid.&lt;/p&gt;
+
+&lt;h2 id=&quot;lcp-overview-and-example&quot;&gt;1.3. LCP Overview and Example&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In order to encrypt Resources and expose its Encryption Profile, LCP relies on two different files:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;License Document (&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Both of these files are contained inside the EPUB Container, although the License Document can be transmitted initially outside the Container. Following the &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt; specification, &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; identifies the Publication Resources that are protected and points to the Content Key needed to decrypt them. This Content Key is located inside the License Document and is itself encrypted using the third element of LCP, the User Key.  The User Key is generated by taking a hash of a User Passphrase. The User Key is used to decrypt the Content Key, which in turn is used to decrypt the Publication Resources.&lt;/p&gt;
+
+&lt;p&gt;The License Document may also contain links to external resources, information identifying the User, and information about what rights are conveyed to the User and which are not.  Rights information may include things like the time for which the license is valid, whether the book may be printed or copied, etc.  Finally, the License Document always includes a digital signature to prevent modification of any of its components.&lt;/p&gt;
+
+&lt;p&gt;Figure 1 shows the relationships among the various components of LCP.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/LCP_Archi_1.png&quot; alt=&quot;Readium LCP components&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;protecting-the-publication&quot;&gt;Protecting the Publication&lt;/h3&gt;
+
+&lt;p&gt;To protect a Publication, the Provider follows these steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Generate a unique Content Key for the Publication.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Store this Content Key for future use in licensing the Publication.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Encrypt each protected Resource using that key, after compression if applicable.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Add these protected Resources to the Container, replacing the unprotected versions.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; document (as described in section 2.2) that includes an EncryptedData element for each protected Resource that contains:&lt;/p&gt;
+
+    &lt;p&gt;a. An EncryptionMethod element that lists the algorithm used&lt;/p&gt;
+
+    &lt;p&gt;b. A KeyInfo element with a RetrievalMethod child that points to the Content Key in the License Document&lt;/p&gt;
+
+    &lt;p&gt;c. A CipherData element that identifies the protected Resource&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Add &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; to the Container.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The Publication is now protected (i.e., has become a Protected Publication) and is ready for licensing to one or more Users.&lt;/p&gt;
+
+&lt;h3 id=&quot;licensing-the-publication&quot;&gt;Licensing the Publication&lt;/h3&gt;
+
+&lt;p&gt;After a User requests a Protected Publication, the following steps are followed by the Provider to license the Protected Publication:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Generate the User Key by hashing the User Passphrase (as described in section 4.2). It is assumed that the User and their User Passphrase are already known to the Provider.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Encrypt the Content Key for the Protected Publication using the User Key.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a License Document (&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;) with the following contents (as described in section 3):&lt;/p&gt;
+
+    &lt;p&gt;a. A unique ID for this license&lt;/p&gt;
+
+    &lt;p&gt;b. The date the license was issued&lt;/p&gt;
+
+    &lt;p&gt;c. The URI that identifies the Content Provider&lt;/p&gt;
+
+    &lt;p&gt;d. The encrypted Content Key&lt;/p&gt;
+
+    &lt;p&gt;e. Information about the User Key&lt;/p&gt;
+
+    &lt;p&gt;f. Links to additional information stored outside of the Protected Publication and License Document (&lt;b&gt;OPTIONAL&lt;/b&gt;)&lt;/p&gt;
+
+    &lt;p&gt;g. Information on specific rights being granted to the User (&lt;b&gt;OPTIONAL&lt;/b&gt;)&lt;/p&gt;
+
+    &lt;p&gt;h. Information identifying the User (&lt;b&gt;OPTIONAL&lt;/b&gt;).  Some of the fields in this section &lt;b&gt;MAY&lt;/b&gt; be encrypted using the User Key.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Generate a digital signature for the License Document data and add to the License Document.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There are then two different methods to deliver the License Document and Protected Publication to the User:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;License Document included inside Protected Publication:&lt;/strong&gt;  The Provider adds the License Document to the Protected Publication’s Container and delivers this to the User.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;License Document delivered separately:&lt;/strong&gt; The Provider includes a link from the License Document to the Protected Publication, and then delivers just the License Document to the User. The Reading System processing the License Document will retrieve the Protected Publication and add the License Document to the Container of this Protected Publication.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Whichever method is used, the Reading System will be presented with an EPUB Container that includes the Protected Publication and the License Document.&lt;/p&gt;
+
+&lt;h3 id=&quot;reading-the-publication&quot;&gt;Reading the Publication&lt;/h3&gt;
+
+&lt;p&gt;In order to decrypt and render a Protected Publication, the User’s Reading System will follow these steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Verify the signature for the License Document.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Get the User Key (if already stored) or generate it by hashing the User Passphrase.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Decrypt the Content Key using the User Key.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Decrypt the protected Resources using the Content Key.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;conformance-statements&quot;&gt;1.4 Conformance Statements&lt;/h2&gt;
+
+&lt;p&gt;The keywords &lt;b&gt;MUST&lt;/b&gt;, &lt;b&gt;MUST NOT&lt;/b&gt;, &lt;b&gt;REQUIRED&lt;/b&gt;, &lt;b&gt;SHALL&lt;/b&gt;, &lt;b&gt;SHALL NOT&lt;/b&gt;, &lt;b&gt;SHOULD&lt;/b&gt;, &lt;b&gt;SHOULD NOT&lt;/b&gt;, &lt;b&gt;RECOMMENDED&lt;/b&gt;, &lt;b&gt;MAY&lt;/b&gt;, and &lt;b&gt;OPTIONAL&lt;/b&gt; in this document are to be interpreted as described in &lt;a href=&quot;https://docs.google.com/a/feedbooks.com/document/d/1yLX0GfSxN8a5JGJmbXlbWYAI63KGDrHACp4BwByGpV0/edit#bookmark=id.4v706jdntcjd&quot;&gt;[RFC2119]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;All sections of this specification are normative except where identified by the informative status label “This section is informative”. The application of informative status to sections and appendices applies to all child content and subsections they &lt;b&gt;MAY&lt;/b&gt; contain.&lt;/p&gt;
+
+&lt;p&gt;All examples in this specification are informative.&lt;/p&gt;
+
+&lt;h1 id=&quot;publication&quot;&gt;2. Publication&lt;/h1&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;2.1. Introduction&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;LCP follows the &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt; specification to identify encrypted Resources within the EPUB Container. Specifically, LCP uses &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; to indicate which Resources listed in the Package Document are encrypted and to reference the Content Key.&lt;/p&gt;
+
+&lt;h2 id=&quot;encrypted-resources&quot;&gt;2.1. Encrypted Resources&lt;/h2&gt;
+
+&lt;p&gt;In order to make sure that Protected Publications remain identifiable by Reading Systems, a certain number of Resources are prohibited from being encrypted.&lt;/p&gt;
+
+&lt;p&gt;LCP inherits the following list of files prohibited from being encrypted from the &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt; specification:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mimetype&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/container.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/manifest.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/metadata.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/rights.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/signatures.xml&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;EPUB &lt;code class=&quot;highlighter-rouge&quot;&gt;rootfiles&lt;/code&gt; (the Package Document for any rendition)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In addition, this specification defines that the following files &lt;b&gt;MUST NOT&lt;/b&gt; be encrypted:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Navigation Documents referenced in any Package Document from the Publication (all Publication Resources listed in the Publication manifest with the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-item-property-values&quot;&gt;“nav” property&lt;/a&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;NCX documents referenced in any Package Document from the Publication (all Publication Resources listed in the Publication manifest with the media type “application/x-dtbncx+xml”)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Cover images (all Publication Resources listed in the Publication manifest with the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-item-property-values&quot;&gt;“cover-image” property&lt;/a&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;using-meta-infencryptionxml-for-lcp&quot;&gt;2.2. Using META-INF/encryption.xml for LCP&lt;/h2&gt;
+
+&lt;p&gt;As defined in the &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt; specification, all encrypted Publication Resources &lt;b&gt;MUST&lt;/b&gt; be identified in the well-known file &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; using &lt;a href=&quot;#bookmark=id.8z50l0g1ec5y&quot;&gt;[XML-ENC]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Publications protected using LCP, there are additional requirements for identifying the key used to encrypt these Resources (the LCP Content Key):&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;ds:KeyInfo&lt;/code&gt; element &lt;b&gt;MUST&lt;/b&gt; point to the Content Key using the &lt;code class=&quot;highlighter-rouge&quot;&gt;ds:RetrievalMethod&lt;/code&gt; element.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;URI&lt;/code&gt; attribute of &lt;code class=&quot;highlighter-rouge&quot;&gt;ds:RetrievalMethod&lt;/code&gt; &lt;b&gt;MUST&lt;/b&gt; use a value of “&lt;code class=&quot;highlighter-rouge&quot;&gt;license.lcpl#/encryption/content_key&lt;/code&gt;” to point to the encrypted Content Key stored in the License Document. This URI follows the &lt;a href=&quot;#bookmark=id.qve5zp57i7lg&quot;&gt;[JSON Pointer]&lt;/a&gt; specification.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt; attribute &lt;b&gt;MUST&lt;/b&gt; use a value of “&lt;code class=&quot;highlighter-rouge&quot;&gt;http://readium.org/2014/01/lcp#EncryptedContentKey&lt;/code&gt;” to identify the target of the URI as an encrypted Content Key.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;In the following example, adapted from &lt;a href=&quot;#bookmark=id.1nju5kx8lxe6&quot;&gt;[OCF]&lt;/a&gt;&lt;/em&gt;, an image.jpeg resource is encrypted using AES with the Content Key.*&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;encryption&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns =&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;urn:oasis:names:tc:opendocument:xmlns:container&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:enc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:ds=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2000/09/xmldsig#&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;enc:EncryptedData&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ED1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;enc:EncryptionMethod&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Algorithm=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;ds:KeyInfo&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;ds:RetrievalMethod&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;URI=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;license.lcpl#/encryption/content_key&quot;&lt;/span&gt;
+                &lt;span class=&quot;na&quot;&gt;Type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://readium.org/2014/01/lcp#EncryptedContentKey&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/ds:KeyInfo&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;enc:CipherData&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;enc:CipherReference&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;URI=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;image.jpeg&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/enc:CipherData&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/enc:EncryptedData&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/encryption&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;license-document&quot;&gt;3. License Document&lt;/h1&gt;
+
+&lt;h2 id=&quot;introduction-1&quot;&gt;3.1. Introduction&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;While &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; describes how the Resources are encrypted and where the encrypted Content Key is located, all of the other relevant information for LCP is stored in the License Document.&lt;/p&gt;
+
+&lt;p&gt;This specification defines the License Document’s syntax, location in the Container, media type, file extension and processing model.&lt;/p&gt;
+
+&lt;h2 id=&quot;content-conformance&quot;&gt;3.2. Content Conformance&lt;/h2&gt;
+
+&lt;p&gt;A License Document &lt;b&gt;MUST&lt;/b&gt; meet all of the following criteria:&lt;/p&gt;
+
+&lt;p&gt;Document properties&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; meet the conformance constraints for JSON documents as defined in [&lt;a href=&quot;#bookmark=kix.vxcitddcyufy&quot;&gt;JSON&lt;/a&gt;].&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; be encoded using UTF-8.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;File properties&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Its filename &lt;b&gt;MUST&lt;/b&gt; use the file extension &lt;code class=&quot;highlighter-rouge&quot;&gt;.lcpl&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Its MIME media type is &lt;code class=&quot;highlighter-rouge&quot;&gt;application/vnd.readium.lcp.license-1.0+json&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Its location in the Container &lt;b&gt;MUST&lt;/b&gt; be &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;core-license-information&quot;&gt;3.3. Core License Information&lt;/h2&gt;
+
+&lt;p&gt;The License Document &lt;b&gt;MUST&lt;/b&gt; contain the following name/value pairs:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Value&lt;/th&gt;
+      &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;em&gt;id&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;Unique identifier for the License&lt;/td&gt;
+      &lt;td&gt;String&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;em&gt;issued&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;Date when the license was first issued&lt;/td&gt;
+      &lt;td&gt;ISO 8601&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;em&gt;provider&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;Unique identifier for the Provider&lt;/td&gt;
+      &lt;td&gt;URI&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+In addition, the License Document &lt;b&gt;MAY&lt;/b&gt; contain the following name/value pair:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Value&lt;/th&gt;
+      &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;updated&lt;/td&gt;
+      &lt;td&gt;Date when the license was last updated&lt;/td&gt;
+      &lt;td&gt;ISO 8601&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;transmitting-keys--the-encryption-object&quot;&gt;3.4. Transmitting keys:  The encryption object&lt;/h2&gt;
+
+&lt;p&gt;In addition to Core License information, the License Document &lt;b&gt;MUST&lt;/b&gt; contain an &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption&lt;/code&gt; object with the following name/value pair:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Value&lt;/th&gt;
+      &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;profile&lt;/td&gt;
+      &lt;td&gt;Identifies the Encryption Profile used by this LCP-protected Publication&lt;/td&gt;
+      &lt;td&gt;URI&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+The &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption&lt;/code&gt; object &lt;b&gt;MUST&lt;/b&gt; also contain the following two objects: &lt;code class=&quot;highlighter-rouge&quot;&gt;content_key&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;user_key&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption/content_key&lt;/code&gt; object contains the Content Key (encrypted using the User Key) used to encrypt the Publication Resources. It &lt;b&gt;MUST&lt;/b&gt; contain the following name/value pairs:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Value&lt;/th&gt;
+      &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  	&lt;tr&gt;
+	    &lt;td&gt;encrypted_value&lt;/td&gt;
+	    &lt;td&gt;Encrypted Content Key&lt;/td&gt;
+	    &lt;td&gt;Base 64 encoded octet sequence&lt;/td&gt;
+	  &lt;/tr&gt;
+	  &lt;tr&gt;
+	    &lt;td&gt;algorithm&lt;/td&gt;
+	    &lt;td&gt;Algorithm used to encrypt the Content Key, identified using the URIs defined in [XML-ENC]. This &lt;b&gt;MUST&lt;/b&gt; match the Content Key encryption algorithm named in the Encryption Profile identified in `encryption/profile`.&lt;/td&gt;
+	    &lt;td&gt;URI&lt;/td&gt;
+	  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+The &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption/user_key&lt;/code&gt; object contains information regarding the User Key used to encrypt the Content Key. It &lt;b&gt;MUST&lt;/b&gt; contain the following name/value pairs:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;thead&gt;
+   &lt;tr&gt;
+     &lt;th&gt;Name&lt;/th&gt;
+     &lt;th&gt;Value&lt;/th&gt;
+     &lt;th&gt;Format/data type&lt;/th&gt;
+   &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt; 
+   &lt;tr&gt;
+     &lt;td&gt;text_hint&lt;/td&gt;
+     &lt;td&gt;A hint to be displayed to the User to help them remember the User Passphrase&lt;/td&gt;
+     &lt;td&gt;String&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt;algorithm&lt;/td&gt;
+     &lt;td&gt;Algorithm used to generate the User Key from the User Passphrase, identified using the URIs defined in [XML-ENC]. This &lt;b&gt;MUST&lt;/b&gt; match the User Key hash algorithm named in the Encryption Profile identified in `encryption/profile`.&lt;/td&gt;
+     &lt;td&gt;URI&lt;/td&gt;
+   &lt;/tr&gt;
+   &lt;tr&gt;
+     &lt;td&gt;key_check&lt;/td&gt;
+     &lt;td&gt;The value of the License Document’s `id` field, encrypted using the User Key and the same algorithm identified for Content Key encryption in `encryption/content_key/algorithm`. This is used to verify that the Reading System has the correct User Key.&lt;/td&gt;
+     &lt;td&gt;Base 64 encoded octet sequence&lt;/td&gt;
+   &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;This example shows the encryption information for a License Document that uses the base Encryption Profile for LCP 1.0.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;key_check&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;pointing-to-external-resources-the-links-object&quot;&gt;3.5. Pointing to external resources: the links object&lt;/h2&gt;
+
+&lt;p&gt;A License Document &lt;b&gt;MUST&lt;/b&gt; also contain a &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object.  This is used to associate the License Document with resources that are not locally available.  Each object nested in &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; is a link or an array of links, where the object name is a link relation and its content is an object or an array of objects. Each link object contains the link URI and an &lt;b&gt;OPTIONAL&lt;/b&gt; set of other link properties.&lt;/p&gt;
+
+&lt;p&gt;This specification introduces the following link relations for the &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;hint&lt;/td&gt;
+    &lt;td&gt;Location where a Reading System can redirect a User looking for additional information about the User Passphrase.&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;publication&lt;/td&gt;
+    &lt;td&gt;Location where the Publication associated with the License Document can be downloaded&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;self&lt;/td&gt;
+    &lt;td&gt;As defined in the IANA registry of link relations: &quot;Conveys an identifier for the link's context.&quot;&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;support&lt;/td&gt;
+    &lt;td&gt;Support resources for the user (either a website, an email or a telephone number).&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+In addition to these link relations, this specification introduces the &lt;a href=&quot;#bookmark=id.fgd0vfctjii3&quot;&gt;LCP Link Relations Registry&lt;/a&gt;. All official link relations used in the License Document and declared in official LCP specification documents &lt;b&gt;MUST&lt;/b&gt; be referenced in the registry.&lt;/p&gt;
+
+&lt;p&gt;Link relations &lt;b&gt;MAY&lt;/b&gt; also be extended for vendor-specific applications. Such links &lt;b&gt;MUST&lt;/b&gt; use a URI instead of a string to identify their link relations.&lt;/p&gt;
+
+&lt;p&gt;Each link object contains the following name/value pairs:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;href&lt;/td&gt;
+    &lt;td&gt;Link location&lt;/td&gt;
+    &lt;td&gt;URI or URI Template&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;title&lt;/td&gt;
+    &lt;td&gt;Title of the link&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;type&lt;/td&gt;
+    &lt;td&gt;Expected MIME media type value for the external resources&lt;/td&gt;
+    &lt;td&gt;MIME media type&lt;/td&gt;
+    &lt;td&gt;No, but highly recommended&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;templated&lt;/td&gt;
+    &lt;td&gt;Indicates that the href is a URI Template&lt;/td&gt;
+    &lt;td&gt;Boolean&lt;/td&gt;
+    &lt;td&gt;No, default value is &quot;false&quot;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;profile&lt;/td&gt;
+    &lt;td&gt;Expected profile used to identify the external resource&lt;/td&gt;
+    &lt;td&gt;URI&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;length&lt;/td&gt;
+    &lt;td&gt;Content length in octets&lt;/td&gt;
+    &lt;td&gt;Integer&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;hash&lt;/td&gt;
+    &lt;td&gt;SHA-256 hash of the resource&lt;/td&gt;
+    &lt;td&gt;Base 64 encoded octet sequence&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;In this example, the License Document points to a publication, contains the location of a hint about its User Passphrase and uses an extension to&lt;/em&gt; &lt;strong&gt;&lt;em&gt;provide an authentication service&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;publication&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/file.epub&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/epub+zip&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;length&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;264929&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hash&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;8b752f93e5e73a3efff1c706c1c2e267dffc6ec01c382cbe2a6ca9bd57cc8378&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/passphraseHint?user_id=1234&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;support&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mailto:support@example.org&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;tel:1800836482&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/support&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;http://mylcpextension.com/authentication&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/authenticateMe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Authentication service&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.myextension.authentication+json&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;http://mylcpextension.com/book_recommendations&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/recommended/1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.example.com/recommended/1.opds&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/atom+xml; profile=opds-catalog; kind=acquisition&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;identifying-rights-and-restrictions-the-rights-object&quot;&gt;3.6. Identifying rights and restrictions: the rights object&lt;/h2&gt;
+
+&lt;p&gt;The License Document &lt;b&gt;MAY&lt;/b&gt; also express a series of rights using the &lt;code class=&quot;highlighter-rouge&quot;&gt;rights&lt;/code&gt; object.  The &lt;code class=&quot;highlighter-rouge&quot;&gt;rights&lt;/code&gt; object &lt;b&gt;MAY&lt;/b&gt; include the following fields:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;th&gt;Default&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;print&lt;/td&gt;
+    &lt;td&gt;Maximum number of pages that can be printed over the lifetime of the license&lt;/td&gt;
+    &lt;td&gt;Integer&lt;/td&gt;
+    &lt;td&gt;Unlimited&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;copy&lt;/td&gt;
+    &lt;td&gt;Maximum number of characters that can be copied to the clipboard over the lifetime of the license&lt;/td&gt;
+    &lt;td&gt;Integer&lt;/td&gt;
+    &lt;td&gt;Unlimited&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;start&lt;/td&gt;
+    &lt;td&gt;Date and time when the license begins&lt;/td&gt;
+    &lt;td&gt;ISO 8601 date&lt;/td&gt;
+    &lt;td&gt;None (perpetual license)&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;end&lt;/td&gt;
+    &lt;td&gt;Date and time when the license ends&lt;/td&gt;
+    &lt;td&gt;ISO 8601 date&lt;/td&gt;
+    &lt;td&gt;None (perpetual license)&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;[Extension URI]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+All name/value pairs using an integer as their data type (print and copy for this specification) &lt;b&gt;MUST NOT&lt;/b&gt; use leading zeroes in values (e.g., “9”, not “09”).&lt;/p&gt;
+
+&lt;p&gt;For the &lt;code class=&quot;highlighter-rouge&quot;&gt;print&lt;/code&gt; right, a page is defined as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The page as defined in the Publication, if it is pre-paginated (fixed layout) OR&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The page as defined by the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-nav-def-types-pagelist&quot;&gt;page-list nav element&lt;/a&gt; of the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-nav&quot;&gt;EPUB Navigation Document&lt;/a&gt;, if this exists OR&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;1024 Unicode characters for all other cases&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;copy&lt;/code&gt; right only covers the ability to copy to the clipboard and is limited to text (no images, etc.).&lt;/p&gt;
+
+&lt;p&gt;In addition to these rights, this specification introduces the &lt;a href=&quot;#bookmark=id.2bbhcsxrph1l&quot;&gt;LCP Rights Registry&lt;/a&gt;. All official rights information used in the License Document and declared in official LCP specification documents &lt;b&gt;MUST&lt;/b&gt; be referenced in the registry.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;rights&lt;/code&gt; object &lt;b&gt;MAY&lt;/b&gt; be extended to include any number of implementor-specific rights. Each extension right &lt;b&gt;MUST&lt;/b&gt; be identified using a URI controlled by the implementor.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;In this example, the License Document grants the following rights: not allowed to print at all, copy up to 2048 characters at a time of the book, and the license has an expiration date.
+There is also a vendor extension granting the right to tweet parts of this book.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;print&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;copy&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2048&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;end&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-25T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/rights/tweet&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;identifying-the-user-the-user-object&quot;&gt;3.7. Identifying the user: the user object&lt;/h2&gt;
+
+&lt;p&gt;The License Document &lt;b&gt;MAY&lt;/b&gt; embed information about the user using the &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; object. The &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; object includes the following fields:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;Unique identifier for the User at a specific Provider&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;No, but highly recommended&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;email&lt;/td&gt;
+    &lt;td&gt;The User’s e-mail address&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;name&lt;/td&gt;
+    &lt;td&gt;The User’s name&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;encrypted&lt;/td&gt;
+    &lt;td&gt;A list of which user object values are encrypted in this License Document&lt;/td&gt;
+    &lt;td&gt;Array of one or more strings matching the above names or an extension&lt;/td&gt;
+    &lt;td&gt;Yes, if encryption is used for any field&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;[Extension URI]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+    &lt;td&gt;[Defined by implementor]&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+In addition to these user information, this specification introduces the &lt;a href=&quot;#bookmark=id.koplzgm8bodb&quot;&gt;LCP User Fields Registry&lt;/a&gt;. All official user fields used in the License Document and declared in official LCP specification documents &lt;b&gt;MUST&lt;/b&gt; be referenced in the registry.&lt;/p&gt;
+
+&lt;p&gt;As with rights, The &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt; object &lt;b&gt;MAY&lt;/b&gt; be extended to include any number of implementor-specific fields. Each extension field &lt;b&gt;MUST&lt;/b&gt; be identified by a URI controlled by the implementor.&lt;/p&gt;
+
+&lt;p&gt;To protect private User data, any of these fields &lt;b&gt;MAY&lt;/b&gt; be encrypted, except for the &lt;code class=&quot;highlighter-rouge&quot;&gt;encrypted&lt;/code&gt; field, which &lt;b&gt;MUST&lt;/b&gt; remain in plain text. If encrypted, the field values &lt;b&gt;MUST&lt;/b&gt; be encrypted using the User Key and the same encryption algorithm identified in the &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption/content_key&lt;/code&gt; object. The names of all encrypted fields &lt;b&gt;MUST&lt;/b&gt; be listed in the &lt;code class=&quot;highlighter-rouge&quot;&gt;encrypted&lt;/code&gt; array.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;In the following example, an identifier, a provider and an email are provided. There is also an extension to indicate the user’s preferred language. The email is encrypted.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;EnCt2b8c6d2afd94ae4ed201b27049d8ce1afe31a90ceb8c6d2afd94ae4ed201b2704RjkaXRveAAarHwdlID1KCIwEmS&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/user/language&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;tlh&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;signing-the-license-the-signature-object&quot;&gt;3.8. Signing the license: the signature object&lt;/h2&gt;
+
+&lt;p&gt;As described in &lt;a href=&quot;#heading=h.5b6w4py4xc89&quot;&gt;5. Signature and Public Key Infrastructure&lt;/a&gt;, the License Document includes a digital signature to validate that it has not been altered.  The License Document &lt;b&gt;MUST&lt;/b&gt; include information about the signature using the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object. The &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object &lt;b&gt;MUST&lt;/b&gt; include the following fields:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;algorithm&lt;/td&gt;
+    &lt;td&gt;Algorithm used to calculate the signature, identified using the URIs given in [XML-SIG].  This &lt;b&gt;MUST&lt;/b&gt; match the signature algorithm named in the Encryption Profile identified in `encryption/profile`.&lt;/td&gt;
+    &lt;td&gt;URI&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;certificate&lt;/td&gt;
+    &lt;td&gt;The Provider Certificate: an X509 certificate used by the Content Provider&lt;/td&gt;
+    &lt;td&gt;Base 64 encoded DER certificate&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;value&lt;/td&gt;
+    &lt;td&gt;Value of the signature&lt;/td&gt;
+    &lt;td&gt;Base 64 encoded octet sequence&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+For more information on how the signature and the certificate &lt;b&gt;SHOULD&lt;/b&gt; be calculated, encoded and processed, see &lt;a href=&quot;#heading=h.5b6w4py4xc89&quot;&gt;5. Signature and Public Key Infrastructure&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This example shows the License Document signature.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;…&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;certificate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;MIIDEjCCAfoCCQDwMOjkYYOjPjANBgkqhkiG9w0BAQUFADBLMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTETMBEGA1UEBxMKRXZlcnl3aGVyZTESMBAGA1UEAxMJbG9jYWxob3N0MB4XDTE0MDEwMjIxMjYxNloXDTE1MDEwMjIxMjYxNlowSzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExEzARBgNVBAcTCkV2ZXJ5d2hlcmUxEjAQBgNVBAMTCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOpCRECG7icpf0H37kuAM7s42oqggBoikoTpo5yapy+s5eFSp8HSqwhIYgZ4SghNLkj3e652SALav7chyZ2vWvitZycY+aq50n5UTTxDvdwsC5ZNeTycuzVWZALKGhV7VUPEhtWZNm0gruntronNa8l2WS0aF7P5SbhJ65SDQGprFFaYOSyN6550P3kqaAO7tDddcA1cmuIIDRf8tOIIeMkBFk1Qf+lh+3uRP2wztOTECSMRxX/hIkCe5DRFDK2MuDUyc/iY8IbY0hMFFGw5J7MWOwZLBOaZHX+Lf5lOYByPbMH78O0dda6T+tLYAVzsmJdHJFtaRguCaJVtSXKQUAMCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAi9HIM+FMfqXsRUY0rGxLlw403f3YtAG/ohzt5i8DKiKUG3YAnwRbL/VzXLZaHru7XBC40wmKefKqoA0RHyNEddXgtY/aXzOlfTvp+xirop+D4DwJIbaj8/wHKWYGBucA/VgGY7JeSYYTUSuz2RoYtjPNRELIXN8A+D+nkJ3dxdFQ6jFfVfahN3nCIgRqRIOt1KaNI39CShccCaWJ5DeSASLXLPcEjrTi/pyDzC4kLF0VjHYlKT7lq5RkMO6GeC+7YFvJtAyssM2nqunA2lUgyQHb1q4Ih/dcYOACubtBwW0ITpHz8N7eO+r1dtH/BF4yxeWl6p5kGLvuPXNU21ThgA==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNEij5CmIpZ63yRNKnFS5rSRnDMYmQT/fkUYco7BUi7MPPU6OFf4+kaToNWl8m/ZlMxDcS3BZnVhSEKzUNQn1f2y3sUcXjes7wHbImDc6dRthbL/E+assh5HEqakrDuA4lM8XNfukEYQJnivqhqMLOGM33RnS5nZKrPPK/c2F/vGjJffSrlX3W3Jlds0/MZ6wtVeKIugR06c56V6+qKsnMLAQJaeOxxBXmbFdAEyplP9irn4D9tQZKqbbMIw==&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;user-key&quot;&gt;4. User Key&lt;/h1&gt;
+
+&lt;h2 id=&quot;introduction-2&quot;&gt;4.1. Introduction&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In order for any symmetrically-encrypted message to work, there must be an agreed-upon key shared by the sender and receiver.  In LCP, this is the User Key. The Provider must have access to the User Key in order to secure the Content Key within the License Document. The Reading System must also have the User Key in order to decrypt the Content Key in the License Document.&lt;/p&gt;
+
+&lt;p&gt;LCP uses a passphrase model for sharing the User Key: in a simple implementation, when the Reading System receives a new License Document, it prompts the User for a passphrase to access the Content Key.  LCP defines the User Key as a hash of this User Passphrase. This passphrase can be anything at all: a User-defined password, a Provider-defined password, an e-mail address, a library card number, etc.&lt;/p&gt;
+
+&lt;h2 id=&quot;calculating-the-user-key&quot;&gt;4.2. Calculating the User Key&lt;/h2&gt;
+
+&lt;p&gt;The User Passphrase &lt;b&gt;MUST&lt;/b&gt; be a UTF-8 encoded string. There are no restrictions on the length or content of the User Passphrase. There are no requirements for how it is to be created.&lt;/p&gt;
+
+&lt;p&gt;The User Key is the result of applying a hashing function on the User Passphrase, using the hash algorithm provided in the &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption/user_key&lt;/code&gt; object in the License Document. Processing of any kind, including whitespace escaping or normalization, &lt;b&gt;SHALL NOT&lt;/b&gt; be done on the User Passphrase before hashing.&lt;/p&gt;
+
+&lt;h2 id=&quot;hints&quot;&gt;4.3. Hints&lt;/h2&gt;
+
+&lt;p&gt;In order to facilitate the entry of the passphrase by the User, the LCP License Document supports two ways for the Reading System to provide passphrase prompts or hints to the User:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;user_key/text_hint&lt;/code&gt; field is a simple prompt that can be displayed to the User when entering the User Passphrase (e.g., “Enter your Imaginary Book Retailer password”).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;links/hint&lt;/code&gt; object points to a location that provides passphrase hints or other assistance.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The content of &lt;code class=&quot;highlighter-rouge&quot;&gt;user_key/text_hint&lt;/code&gt; and of the resource pointed to by &lt;code class=&quot;highlighter-rouge&quot;&gt;links/hint&lt;/code&gt; &lt;b&gt;SHOULD&lt;/b&gt; be human-readable, directed to the User, and &lt;b&gt;SHOULD&lt;/b&gt; help the User enter their passphrase.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements-for-the-user-key--user-passphrase&quot;&gt;4.4. Requirements for the User Key &amp;amp; User Passphrase&lt;/h2&gt;
+
+&lt;p&gt;In order to simplify the process for accessing Protected Publications, the Provider &lt;b&gt;SHOULD&lt;/b&gt; use the same User Key for all licenses issued to the same User.&lt;/p&gt;
+
+&lt;p&gt;The security of LCP depends in large part on the security of the User Key and User Passphrase. Therefore, special care &lt;b&gt;SHOULD&lt;/b&gt; be taken to secure these throughout the licensing workflow:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Passphrases &lt;b&gt;SHOULD&lt;/b&gt; be sufficiently complex to prevent brute-force attacks.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Passphrases &lt;b&gt;MUST NOT&lt;/b&gt; be transmitted in plaintext.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If the Provider needs to share User Key information among multiple systems, they &lt;b&gt;SHOULD&lt;/b&gt; transmit User Keys and not User Passphrases, and &lt;b&gt;SHOULD&lt;/b&gt; transmit this information over secure channels.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;User Passphrases &lt;b&gt;MUST NOT&lt;/b&gt; be stored by the Reading System; instead it &lt;b&gt;SHOULD&lt;/b&gt; only store User Keys.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;signature-and-public-key-infrastructure&quot;&gt;5. Signature and Public Key Infrastructure&lt;/h1&gt;
+
+&lt;h2 id=&quot;introduction-3&quot;&gt;5.1. Introduction&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Given the importance of the precise expression of various objects in the License Document, it is critical that the Reading System be able to verify that the content of the License Document is authentic and has not been altered. This is done via a digital signature that is verified via a Public Key Infrastructure as defined in &lt;a href=&quot;#bookmark=id.gck4mo590x7l&quot;&gt;[X509]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Calculating a signature using the ECDSA set of algorithms is done on a byte stream, which is unique, while the License Document is a JSON document where multiple representations might lead to the same structure. Thus, to ensure a stable signature between the Reading System and the Content Provider, some transformations must be applied prior to signing the Document and verifying the signature.&lt;/p&gt;
+
+&lt;p&gt;The steps &lt;b&gt;REQUIRED&lt;/b&gt; of the Provider to sign the License Document are:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The contents of the License Document (minus the signature object) are put in a canonical form: alphabetized with non-significant whitespace removed (see &lt;a href=&quot;#bookmark=id.b3hs34goxhn&quot;&gt;Section 5.3&lt;/a&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The signature value for the canonical form of the License Document is calculated following the algorithm identified in the Encryption Profile.  This typically will involve taking a hash of the data and encrypting it using the private key.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The signature value and the Provider Certificate are added to the License Document in the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object, as described in &lt;a href=&quot;#bookmark=id.v0a1ctgtzwug&quot;&gt;Section 3.8&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The steps &lt;b&gt;REQUIRED&lt;/b&gt; of the Reading System to validate the signature are:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Obtain the Root Certificate from the License Authority.  This certificate is embedded in the Reading System to validate all Provider Certificates.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Using this Root Certificate, validate the Provider Certificate that is included in the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object. This prevents another entity who is not the Provider from forging License Documents.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Strip the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object from the License Document.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Put the remainder of the License Document contents into canonical form.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Calculate the hash of the canonical License Document data using the signature algorithm identified in the Encryption Profile.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Decrypt the signature value given in the signature object using the public key given in the Provider Certificate and confirm that it matches the calculated hash.  This confirms that the contents of the License Document have not been altered in transit.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Because the Provider Certificate is included in the License Document and the Root Certificate is embedded in the Reading System, the entire validation process can take place without any Internet connectivity.&lt;/p&gt;
+
+&lt;p&gt;To make sure that the Provider Certificate has not been revoked, the Reading System also checks a Certificate Revocation List maintained by the Readium Foundation.  In order to facilitate offline reading, the Reading System does not need to check the revocation list every time it processes a License Document.  It is only necessary that it updates the list regularly when an Internet connection is available (e.g., every time it downloads a new License or book).&lt;/p&gt;
+
+&lt;h2 id=&quot;certificates&quot;&gt;5.2. Certificates&lt;/h2&gt;
+
+&lt;h3 id=&quot;provider-certificates&quot;&gt;5.2.1 Provider Certificates&lt;/h3&gt;
+
+&lt;p&gt;Content Providers &lt;b&gt;MUST&lt;/b&gt; have a Certificate in the &lt;a href=&quot;#bookmark=id.gck4mo590x7l&quot;&gt;[X509]&lt;/a&gt; v3 format issued and signed by the License Authority using the Root Certificate: this is referred to here as the Provider Certificate. The subject of the Provider Certificate &lt;b&gt;SHOULD&lt;/b&gt; represent the Content Provider.&lt;/p&gt;
+
+&lt;p&gt;Content Providers &lt;b&gt;MUST&lt;/b&gt; distribute their Provider Certificate in any License Document they issue in the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature/certificate&lt;/code&gt; field. They also &lt;b&gt;MUST&lt;/b&gt; use the private key paired with their Provider Certificate’s public key to sign the License Document. For a License Document to be considered valid, the Provider Certificate &lt;b&gt;MUST&lt;/b&gt;  have been valid at the time the License Document was issued (as indicated by the &lt;code class=&quot;highlighter-rouge&quot;&gt;issued&lt;/code&gt; field), and the Provider Certificate *MUSdT NOT**t have been revoked.&lt;/p&gt;
+
+&lt;h3 id=&quot;root-certificate&quot;&gt;5.2.2 Root Certificate&lt;/h3&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST&lt;/b&gt; obtain the Root Certificate in the &lt;a href=&quot;#bookmark=id.gck4mo590x7l&quot;&gt;[X509]&lt;/a&gt; v3 format from the License Authority, and &lt;b&gt;SHOULD&lt;/b&gt; keep it up to date. It &lt;b&gt;MUST&lt;/b&gt; be embedded in the Reading System for offline use.&lt;/p&gt;
+
+&lt;h2 id=&quot;canonical-form-of-the-license-document&quot;&gt;5.3. Canonical form of the License Document&lt;/h2&gt;
+
+&lt;p&gt;The canonical form of the License Document is used when calculating and validating the signature. To create the canonical form of the License Document, the following serialization rules must be followed:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Since it is product of the calculation, the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object of the License Document &lt;b&gt;MUST&lt;/b&gt; be removed.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;All object members (name/value pairs) of the License Document &lt;b&gt;MUST&lt;/b&gt;** **be sorted in lexicographical order of their names according to their representation in UTF-8 (United Character Set code point value). Note that this rule is recursive, so that members are sorted at all levels of object nesting.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Within arrays, the order of elements &lt;b&gt;MUST NOT&lt;/b&gt; be altered.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Numbers &lt;b&gt;MUST NOT&lt;/b&gt; include insignificant leading or trailing zeroes. Numbers that include a fraction part (non-integers) &lt;b&gt;MUST&lt;/b&gt; be expressed as a number, fraction, and exponent (normalized scientific notation) using an upper-case “E”.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Strings &lt;b&gt;MUST&lt;/b&gt; use escaping only for those characters for which it is &lt;b&gt;REQUIRED&lt;/b&gt; by &lt;a href=&quot;#bookmark=id.z1uuby7wrhsn&quot;&gt;[JSON]&lt;/a&gt;: backslash (), double-quotation mark (“), and control characters (U+0000 through U+001F). When escaping control characters, the hexadecimal digits &lt;b&gt;MUST&lt;/b&gt; be upper case.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Non-significant whitespace (as defined in &lt;a href=&quot;#bookmark=id.z1uuby7wrhsn&quot;&gt;[JSON]&lt;/a&gt;) &lt;b&gt;MUST&lt;/b&gt; be removed. Whitespace found within strings &lt;b&gt;MUST&lt;/b&gt; be kept.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;5.3.1. Example&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;For this example, we’ll use a License Document which contains a link (hint) and basic user information.&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;key_check&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;First of all, let’s sort this document. Every &lt;a href=&quot;#bookmark=id.z1uuby7wrhsn&quot;&gt;[JSON]&lt;/a&gt; object needs to be sorted:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;key_check&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now that our document is sorted, we can strip all whitespaces and end of lines:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;key_check&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;generating-the-signature&quot;&gt;5.4. Generating the signature&lt;/h2&gt;
+
+&lt;p&gt;In order to sign a License Document, the Content Provider &lt;b&gt;MUST&lt;/b&gt; go through the following steps in order:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Content Provider &lt;b&gt;MUST&lt;/b&gt; create the canonical form of the License Document following the rules given in &lt;a href=&quot;#bookmark=id.b3hs34goxhn&quot;&gt;5.3. Canonical form of the License Document&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Content Provider &lt;b&gt;MUST&lt;/b&gt; calculate the signature using this canonical form of the License Document and using the algorithm described in the &lt;code class=&quot;highlighter-rouge&quot;&gt;algorithm&lt;/code&gt; field with the private key of the Provider Certificate.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The signature &lt;b&gt;MUST&lt;/b&gt; be embedded in the &lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt; field of the &lt;code class=&quot;highlighter-rouge&quot;&gt;signature&lt;/code&gt; object using Base 64 encoding.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Provider Certificate used to validate the signature &lt;b&gt;MUST&lt;/b&gt; be inserted in the &lt;code class=&quot;highlighter-rouge&quot;&gt;certificate&lt;/code&gt; field. It &lt;b&gt;MUST&lt;/b&gt; use the DER notation and be encoded using Base 64.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;example-1&quot;&gt;5.4.1. Example&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Given the License Document in its canonical form&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;key_check&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;issued&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}},&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;provider&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-02-21T09:44:17+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Using the Basic Encryption Profile 1.0 signature algorithm, &lt;code class=&quot;highlighter-rouge&quot;&gt;http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256&lt;/code&gt;, a Content Provider must first hash the License Document using SHA256, giving the following byte sequence, represented here in hexadecimal:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;ce&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2220&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;fc&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;26&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;89&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ed&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2190&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;27&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;af&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;39&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4016&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;623&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;dd&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;bd&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3562&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;dc&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0795769&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;92&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This SHA-256 form must then be signed using the Content Provider’s Private Key, giving the following result, in Base 64:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;q/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;IInic&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;c/EaJHyG&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Kkqk&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;zlJNsiQBmxz&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;lykhyD&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;dA&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;jg&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;ZzrOenYU&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;GxP/xhe&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;H&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Kt&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;WaJ/hnt&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;+GWrEx&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;QOwnNEij&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;CmIpZ&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;yRNKnFS&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;rSRnDMYmQT/fkUYco&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;BUi&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;MPPU&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;OFf&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;+kaToNWl&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;m/ZlMxDcS&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;BZnVhSEKzUNQn&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;sUcXjes&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;wHbImDc&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;dRthbL/E+assh&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;HEqakrDuA&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;lM&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;XNfukEYQJnivqhqMLOGM&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;33&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;RnS&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;nZKrPPK/c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;F/vGjJffSrlX&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;W&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;Jlds&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;/MZ&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;wtVeKIugR&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;06&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;56&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;+qKsnMLAQJaeOxxBXmbFdAEyplP&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;irn&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;D&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;tQZKqbbMIw==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;With this signature and the certificate, a valid license &lt;b&gt;MAY&lt;/b&gt; be created:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;date&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2013-11-04T01:08:15+01:00&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encryption&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;content_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#aes256-cbc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;encrypted_value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://readium.org/lcp/basic-profile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user_key&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmlenc#sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;text_hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Enter your email address&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ef15e740-697f-11e3-949a-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.imaginaryebookretailer.com/lcp/hint&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;d9f298a7-7f34-49e7-8aae-4378ecb1d597&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;signature&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;algorithm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;certificate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;MIIDEjCCAfoCCQDwMOjkYYOjPjANBgkqhkiG9w0BAQUFADBLMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTETMBEGA1UEBxMKRXZlcnl3aGVyZTESMBAGA1UEAxMJbG9jYWxob3N0MB4XDTE0MDEwMjIxMjYxNloXDTE1MDEwMjIxMjYxNlowSzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExEzARBgNVBAcTCkV2ZXJ5d2hlcmUxEjAQBgNVBAMTCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOpCRECG7icpf0H37kuAM7s42oqggBoikoTpo5yapy+s5eFSp8HSqwhIYgZ4SghNLkj3e652SALav7chyZ2vWvitZycY+aq50n5UTTxDvdwsC5ZNeTycuzVWZALKGhV7VUPEhtWZNm0gruntronNa8l2WS0aF7P5SbhJ65SDQGprFFaYOSyN6550P3kqaAO7tDddcA1cmuIIDRf8tOIIeMkBFk1Qf+lh+3uRP2wztOTECSMRxX/hIkCe5DRFDK2MuDUyc/iY8IbY0hMFFGw5J7MWOwZLBOaZHX+Lf5lOYByPbMH78O0dda6T+tLYAVzsmJdHJFtaRguCaJVtSXKQUAMCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAi9HIM+FMfqXsRUY0rGxLlw403f3YtAG/ohzt5i8DKiKUG3YAnwRbL/VzXLZaHru7XBC40wmKefKqoA0RHyNEddXgtY/aXzOlfTvp+xirop+D4DwJIbaj8/wHKWYGBucA/VgGY7JeSYYTUSuz2RoYtjPNRELIXN8A+D+nkJ3dxdFQ6jFfVfahN3nCIgRqRIOt1KaNI39CShccCaWJ5DeSASLXLPcEjrTi/pyDzC4kLF0VjHYlKT7lq5RkMO6GeC+7YFvJtAyssM2nqunA2lUgyQHb1q4Ih/dcYOACubtBwW0ITpHz8N7eO+r1dtH/BF4yxeWl6p5kGLvuPXNU21ThgA==&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNEij5CmIpZ63yRNKnFS5rSRnDMYmQT/fkUYco7BUi7MPPU6OFf4+kaToNWl8m/ZlMxDcS3BZnVhSEKzUNQn1f2y3sUcXjes7wHbImDc6dRthbL/E+assh5HEqakrDuA4lM8XNfukEYQJnivqhqMLOGM33RnS5nZKrPPK/c2F/vGjJffSrlX3W3Jlds0/MZ6wtVeKIugR06c56V6+qKsnMLAQJaeOxxBXmbFdAEyplP9irn4D9tQZKqbbMIw==&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;validating-the-certificate-and-signature&quot;&gt;5.5. Validating the certificate and signature&lt;/h2&gt;
+
+&lt;h4 id=&quot;validating-the-certificate&quot;&gt;&lt;strong&gt;5.5.1. Validating the certificate&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; check that the Certificate was not expired when the License Document was last updated.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; validate the presence of the Provider Certificate in the root chain. To do so, it &lt;b&gt;MUST&lt;/b&gt; check the signature of the Provider Certificate using the public key of the Root Certificate.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; validate that the certificate was not revoked as defined in &lt;a href=&quot;#bookmark=id.gck4mo590x7l&quot;&gt;[X509]&lt;/a&gt;. If a network connection is available, it &lt;b&gt;MUST&lt;/b&gt; update its certificate revocation list before it checks the validity of the certificate.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;validating-the-signature&quot;&gt;&lt;strong&gt;5.5.2. Validating the signature&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;In order to validate the signature, the following steps &lt;b&gt;MUST&lt;/b&gt; be followed in order:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Reading System &lt;b&gt;MUST&lt;/b&gt; calculate the canonical form of the License Document following the rules as expressed in &lt;a href=&quot;#bookmark=id.b3hs34goxhn&quot;&gt;5.3. Canonical form of the License Document&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; calculate the signature as defined in &lt;a href=&quot;#heading=h.rd8grdnozovw&quot;&gt;5.4. Generating the signature&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; verify that the calculated signature value is consistent with the one embedded in the License Document.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;encryption-profiles&quot;&gt;6. Encryption Profiles&lt;/h1&gt;
+
+&lt;h2 id=&quot;introduction-4&quot;&gt;6.1. Introduction&lt;/h2&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;LCP is entirely based on standard encryption algorithms, as defined in &lt;a href=&quot;#bookmark=id.8z50l0g1ec5y&quot;&gt;[XML-ENC]&lt;/a&gt; and &lt;a href=&quot;#bookmark=id.uqa1lz1pqoty&quot;&gt;[XML-SIG]&lt;/a&gt;. In order to maintain maximum flexibility, no specific algorithms are mandated by this specification. Instead, the design of both &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption.xml&lt;/code&gt; and the License Document allow for the identification of encryption algorithms to be discovered by Reading Systems when presented with a Protected Publication.&lt;/p&gt;
+
+&lt;p&gt;In order to simplify this discovery process, the LCP 1.0 specification defines an Encryption Profile, which is the set of encryption algorithms used in a specific Protected Publication and associated Licence Document. Reading Systems that implement the algorithms identified in the Encryption Profile will be able to decrypt Protected Publications encoded using that Encryption Profile. For ease of discovery, the Encryption Profile is identified in the License Document.&lt;/p&gt;
+
+&lt;p&gt;This specification defines the Basic Encryption Profile 1.0, along with a list of associated algorithms extracted from &lt;a href=&quot;#bookmark=id.8z50l0g1ec5y&quot;&gt;[XML-ENC]&lt;/a&gt; or &lt;a href=&quot;#bookmark=id.uqa1lz1pqoty&quot;&gt;[XML-SIG]&lt;/a&gt;. All future official or vendor-specific extensions will also define such an Encryption Profile for easy identification by Reading Systems and publish such profiles in the &lt;a href=&quot;#bookmark=id.8q8i6kf1xm2o&quot;&gt;LCP Encryption Profiles Registry&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;encryption-profile-requirements&quot;&gt;6.2. Encryption Profile Requirements&lt;/h2&gt;
+
+&lt;p&gt;All Encryption Profiles &lt;b&gt;MUST&lt;/b&gt; identify algorithms for the following targets:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Publication Resources&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Content Key and User fields (if encrypted)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;User Passphrase&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Signature&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;All algorithms used in an Encryption Profile &lt;b&gt;MUST&lt;/b&gt; be defined in &lt;a href=&quot;#bookmark=id.8z50l0g1ec5y&quot;&gt;[XML-ENC]&lt;/a&gt; or &lt;a href=&quot;#bookmark=id.uqa1lz1pqoty&quot;&gt;[XML-SIG]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;All Encryption Profiles &lt;b&gt;MUST&lt;/b&gt; use a URI to identify themselves in &lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt; (contained in the &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption&lt;/code&gt; object of the License Document).&lt;/p&gt;
+
+&lt;p&gt;All Encryption Profiles &lt;b&gt;MUST&lt;/b&gt; be registered in the LCP Encryption Profiles registry, as explicitly explained in the registry.&lt;/p&gt;
+
+&lt;h2 id=&quot;basic-encryption-profile-10&quot;&gt;6.3. Basic Encryption Profile 1.0&lt;/h2&gt;
+
+&lt;p&gt;Basic Encryption Profile 1.0 is officially identified in the &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption&lt;/code&gt; object of the License Document using the URL &lt;code class=&quot;highlighter-rouge&quot;&gt;http://readium.org/lcp/basic-profile&lt;/code&gt; for the &lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt; attribute value.&lt;/p&gt;
+
+&lt;p&gt;The following algorithms are associated to the Basic Encryption Profile 1.0:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Encryption target&lt;/th&gt;
+    &lt;th&gt;Algorithm (name)&lt;/th&gt;
+    &lt;th&gt;Algorithm (URI)&lt;/th&gt;
+    &lt;th&gt;Identified in&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Publication Resources&lt;/td&gt;
+    &lt;td&gt;AES 256 bits GCM&lt;/td&gt;
+    &lt;td&gt;http://www.w3.org/2009/xmlenc11#aes256-gcm&lt;/td&gt;
+    &lt;td&gt;encryption.xml&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Content Key, User fields (if encrypted)&lt;/td&gt;
+    &lt;td&gt;AES 256 bits GCM&lt;/td&gt;
+    &lt;td&gt;http://www.w3.org/2009/xmlenc11#aes256-gcm&lt;/td&gt;
+    &lt;td&gt;License Document&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;User Passphrase&lt;/td&gt;
+    &lt;td&gt;SHA-256&lt;/td&gt;
+    &lt;td&gt;http://www.w3.org/2001/04/xmlenc#sha256&lt;/td&gt;
+    &lt;td&gt;License Document&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Signature&lt;/td&gt;
+    &lt;td&gt;ECDSA with SHA-256&lt;/td&gt;
+    &lt;td&gt;http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256
+&lt;/td&gt;
+    &lt;td&gt;License Document&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&quot;reading-system-behavior&quot;&gt;7. Reading System Behavior&lt;/h1&gt;
+
+&lt;h2 id=&quot;detecting-lcp-protected-publications&quot;&gt;7.1 Detecting LCP Protected Publications&lt;/h2&gt;
+
+&lt;p&gt;Reading Systems can detect that a Publication is protected using LCP by either of these means:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;The presence of the License Document (&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The presence of a &lt;code class=&quot;highlighter-rouge&quot;&gt;ds:KeyInfo/ds:RetrievalMethod&lt;/code&gt; element in &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/encryption.xml&lt;/code&gt; that references an LCP Content Key (i.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt; attribute value is “&lt;code class=&quot;highlighter-rouge&quot;&gt;http://readium.org/2014/01/lcp#EncryptedContentKey&lt;/code&gt;” )&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;If &lt;code class=&quot;highlighter-rouge&quot;&gt;encryption.xml&lt;/code&gt; references an LCP Content Key but the License Document is missing, the Reading System &lt;b&gt;SHOULD&lt;/b&gt; report this to the User.&lt;/p&gt;
+
+&lt;h2 id=&quot;license-document-processing&quot;&gt;7.2. License Document processing&lt;/h2&gt;
+
+&lt;h3 id=&quot;overall&quot;&gt;Overall&lt;/h3&gt;
+
+&lt;p&gt;In processing a License Document, Reading Systems &lt;b&gt;MUST&lt;/b&gt; ignore all name/value pairs they do not understand.&lt;/p&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST NOT&lt;/b&gt; store unencrypted versions of the Content Key and/or encrypted user fields.&lt;/p&gt;
+
+&lt;h3 id=&quot;validating-the-license-document&quot;&gt;Validating the License Document&lt;/h3&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Validate the syntax and completeness of the License Document&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Validate the signature as defined in &lt;a href=&quot;#heading=h.aaqe92c2zs2j&quot;&gt;5.5. Verifying the signature&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;acquiring-the-publication&quot;&gt;Acquiring the Publication&lt;/h3&gt;
+
+&lt;p&gt;When License Documents are delivered independently of the Protected Publication, Reading Systems &lt;b&gt;MUST&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Download the Protected Publication at the given URL given in &lt;code class=&quot;highlighter-rouge&quot;&gt;links/publication/href&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;A Reading System that will make the Protected Publication file accessible to the User &lt;b&gt;MUST&lt;/b&gt; add the License Document to the downloaded Protected Publication at &lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/license.lcpl&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;SHOULD&lt;/b&gt; verify the integrity of the downloaded Protected Publication, if a hash is provided.&lt;/p&gt;
+
+&lt;p&gt;A Reading System &lt;b&gt;SHOULD&lt;/b&gt; report any failure to acquire the Protected Publication to the user.&lt;/p&gt;
+
+&lt;h2 id=&quot;user-key-processing&quot;&gt;7.3. User Key processing&lt;/h2&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Show the text hint and URL when prompting the User for their User Passphrase&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;SHOULD&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Store the User Key, but in a secured manner&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Try previously stored User Keys before prompting the User to enter their User Passphrase for a new Protected Publication&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MAY&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Use an alternate technique to discover and exchange the User Key in the background&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Associate specific User Keys with specific Providers and User IDs in order to optimize the discovery of the correct User Key to process a License Document&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST NOT&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Store User Passphrase, only the User Key&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;signature-processing&quot;&gt;7.4. Signature Processing&lt;/h2&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Validate the Signature and Provider Certificate as described in &lt;a href=&quot;#heading=h.aaqe92c2zs2j&quot;&gt;5.5. Verifying the signature&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Update the Certification Revocation List on a regular basis&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;SHOULD&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Be able to update their Root Certificate&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MAY&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Choose to open a Publication even if their own Root Certificate is deprecated&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST NOT&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Open a Publication with an invalid Signature or Provider Certificate&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Block a User from opening a Publication if a network connection is unavailable or the Certificate Revocation List can’t be reached&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;publication-processing&quot;&gt;7.5. Publication Processing&lt;/h2&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Respect all rights limitations given in the License Document&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MAY&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Delete a Protected Publication if its License expired&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Reading Systems &lt;b&gt;MUST NOT&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Store unencrypted Publication Resources&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;normative-references&quot;&gt;Normative references&lt;/h1&gt;
+
+&lt;p&gt;[JSON] &lt;a href=&quot;http://www.ietf.org/rfc/rfc4627&quot;&gt;The application/json Media Type for JavaScript Object Notation (JSON)&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[JSON Pointer] &lt;a href=&quot;http://tools.ietf.org/html/rfc6901&quot;&gt;JavaScript Object Notation (JSON) Pointer&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[OCF] *&lt;a href=&quot;http://www.idpf.org/epub/301/spec/epub-ocf.html&quot;&gt;Open Container Format 3.0.*1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[Publications] *&lt;a href=&quot;http://www.idpf.org/epub/301/spec/epub-publications.html&quot;&gt;EPUB Publications 3.0.*1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[X509] &lt;a href=&quot;http://tools.ietf.org/html/rfc5280&quot;&gt;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[XML-ENC] &lt;a href=&quot;http://www.w3.org/TR/xmlenc-core1/&quot;&gt;XML Encryption Syntax and Processing Version 1.1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[XML-SIG] &lt;a href=&quot;http://www.w3.org/TR/xmldsig-core/&quot;&gt;XML Signature Syntax and Processing (Second Edition)&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Placeholder for URI Template Reference&lt;/p&gt;
+
+&lt;h1 id=&quot;informative-references&quot;&gt;Informative references&lt;/h1&gt;
+
+&lt;p&gt;LCP Link Relations Registry&lt;/p&gt;
+
+&lt;p&gt;LCP Rights Registry&lt;/p&gt;
+
+&lt;p&gt;LCP User Fields Registry&lt;/p&gt;
+
+&lt;p&gt;LCP Encryption Profiles Registry&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 22 Nov 2016 10:00:00 +0100</pubDate>
+        <link>http://localhost:4000/readium-lcp-specification/</link>
+        <guid isPermaLink="true">http://localhost:4000/readium-lcp-specification/</guid>
+        
+        
+        <category>specification</category>
+        
+      </item>
+    
+      <item>
+        <title>Readium LSD Specifications</title>
+        <description>&lt;h2 id=&quot;overview&quot;&gt;1. Overview&lt;/h2&gt;
+
+&lt;h3 id=&quot;purpose-and-scope&quot;&gt;1.1 Purpose and Scope&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This specification, License Status Document (1.0), defines a document for representing the status of a DRM license along with interactions that might affect its status. These interactions put additional responsibilities on both Content Providers and Reading Systems.&lt;/p&gt;
+
+&lt;p&gt;One of the primary objectives is to support lending in public libraries where a user may have the ability to renew a time-limited loan or cancel one before it expires.&lt;/p&gt;
+
+&lt;h3 id=&quot;terminology&quot;&gt;1.2. Terminology&lt;/h3&gt;
+
+&lt;p&gt;This specification uses the following EPUB and Readium-LCP terms:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Publication&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A logical document entity consisting of a set of interrelated &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#gloss-publication-resource-cmt-or-foreign&quot;&gt;resources&lt;/a&gt; and packaged in an EPUB Container, as defined by the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#sibling-specs&quot;&gt;EPUB 3 specifications&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;User&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;An individual that consumes an EPUB Publication using an EPUB Reading System.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;EPUB Reading System (or Reading System)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A system that processes EPUB Publications for presentation to a User in a manner conformant with the &lt;a href=&quot;http://www.idpf.org/epub/30/spec/#sibling-specs&quot;&gt;EPUB 3 specifications&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Additionally, it uses the following terms:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Content Provider&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In Readium-LCP, the authority that grants the License Document and the Publication to the User, usually a Web Server.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;License Document&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Document that contains references to the various keys and restrictions that are applied by a specific DRM on a Publication.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Status Document&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Document that contains information about the history of a License Document, along with its current status and available interactions.&lt;/p&gt;
+
+&lt;h3 id=&quot;example&quot;&gt;1.3. Example&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt; In the following example, the Status Document indicates that the License has been activated on a single device and can be updated if wanted.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;234-5435-3453-345354&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;active&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Your license is currently active and has been used on at least one device.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;updated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;license&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-08-05T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-08-08T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;license&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/35d9b2d6&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.lcp.license.v1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;register&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/35d9b2d6/register{?id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.license.status.v1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;return&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/35d9b2d6/return{?id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.lcp.license.v1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;renew&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/35d9b2d6/renew&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;renew&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/35d9b2d6/renew{?end,id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.lcp.license.v1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;potential_rights&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;end&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-09-13T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;events&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;activate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;eBook App (Android)&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2014-07-14T00:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;709e1380-3528-11e5-a2cb-0800200c9a66&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;conformance-statements&quot;&gt;1.4 Conformance Statements&lt;/h3&gt;
+
+&lt;p&gt;The keywords &lt;b&gt;MUST&lt;/b&gt;, &lt;b&gt;MUST NOT&lt;/b&gt;, &lt;b&gt;REQUIRED&lt;/b&gt;, &lt;b&gt;SHALL&lt;/b&gt;, &lt;b&gt;SHALL NOT&lt;/b&gt;, &lt;b&gt;SHOULD&lt;/b&gt;, &lt;b&gt;SHOULD NOT&lt;/b&gt;, &lt;b&gt;RECOMMENDED&lt;/b&gt;, &lt;b&gt;MAY&lt;/b&gt;, and &lt;b&gt;OPTIONAL&lt;/b&gt; in this document are to be interpreted as described in &lt;a href=&quot;https://docs.google.com/document/d/1yLX0GfSxN8a5JGJmbXlbWYAI63KGDrHACp4BwByGpV0/edit#bookmark=id.4v706jdntcjd&quot;&gt;[RFC2119]&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;All sections of this specification are normative except where identified by the informative status label “This section is informative”. The application of informative status to sections and appendices applies to all child content and subsections they may contain.&lt;/p&gt;
+
+&lt;p&gt;All examples in this specification are informative.&lt;/p&gt;
+
+&lt;h2 id=&quot;status-document&quot;&gt;2. Status Document&lt;/h2&gt;
+
+&lt;h3 id=&quot;content-conformance&quot;&gt;2.1. Content Conformance&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MUST&lt;/b&gt; meet all of the following criteria:&lt;/p&gt;
+
+&lt;p&gt;Document properties&lt;/p&gt;
+
+&lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; meet the conformance constraints for JSON documents as defined in [JSON].
+It &lt;b&gt;MUST&lt;/b&gt; parse as a single JSON object.
+It &lt;b&gt;MUST&lt;/b&gt; be encoded using UTF-8.&lt;/p&gt;
+
+&lt;p&gt;Access to a Status Document &lt;b&gt;MUST NOT&lt;/b&gt; require any form of authentication.&lt;/p&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;SHOULD NOT*&lt;/b&gt;be served over an insecure connection.&lt;/p&gt;
+
+&lt;p&gt;The MIME media type for a Status Document is &lt;code class=&quot;highlighter-rouge&quot;&gt;application/vnd.readium.license.status.v1.0+json&lt;/code&gt;, and HTTP servers &lt;b&gt;MUST&lt;/b&gt; set the “Content-Type” header appropriately.&lt;/p&gt;
+
+&lt;h3 id=&quot;core-information&quot;&gt;2.2. Core Information&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MUST&lt;/b&gt; include the following information:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Key&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;Unique identifier for the License Document associated to the Status Document.&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;status&lt;/td&gt;
+    &lt;td&gt;Current status of the License.&lt;/td&gt;
+    &lt;td&gt;Controlled vocabulary, as defined in section 2.3&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;message&lt;/td&gt;
+    &lt;td&gt;A message meant to be displayed to the User regarding the current status of the license.&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+All messages provided in the message key &lt;strong&gt;SHOULD&lt;/strong&gt; be localized based on the HTTP &lt;code class=&quot;highlighter-rouge&quot;&gt;Accept-Language&lt;/code&gt; header included in the request for the Status Document.&lt;/p&gt;
+
+&lt;h3 id=&quot;status&quot;&gt;2.3. Status&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;status&lt;/code&gt; field succinctly describes the current status of the license. 
+The following values are allowed:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;ready&lt;/td&gt;
+    &lt;td&gt;The License Document is available, but the user hasn't accessed the License and/or Status Document yet.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;active&lt;/td&gt;
+    &lt;td&gt;The license is active, and a device has been successfully registered for this license.
+This is the default value if the License Document does not contain a registration link, or a registration mechanism through the license itself.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;revoked&lt;/td&gt;
+    &lt;td&gt;The license is no longer active, it has been invalidated by the Issuer.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;returned&lt;/td&gt;
+    &lt;td&gt;The license is no longer active, it has been invalidated by the User.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;cancelled&lt;/td&gt;
+    &lt;td&gt;The license is no longer active because it was cancelled prior to activation.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;expired&lt;/td&gt;
+    &lt;td&gt;The license is no longer active because it has expired.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;timestamps&quot;&gt;2.4. Timestamps&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MUST&lt;/b&gt; include an &lt;code class=&quot;highlighter-rouge&quot;&gt;updated&lt;/code&gt; object where the following keys and associated timestamps are provided:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Key&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;license&lt;/td&gt;
+    &lt;td&gt;Time and Date when the License Document was last updated.&lt;/td&gt;
+    &lt;td&gt;ISO 8601 time and date&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;status&lt;/td&gt;
+    &lt;td&gt;Time and Date when the Status Document was last updated.&lt;/td&gt;
+    &lt;td&gt;ISO 8601 time and date&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;links&quot;&gt;2.5. Links&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MUST&lt;/b&gt; include a &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MUST&lt;/b&gt; include at least one link where the relation is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-licence-relation&quot;&gt;2.5.1 The licence Relation&lt;/h4&gt;
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Templated?&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+    &lt;th&gt;HTTP Verb&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;license&lt;/td&gt;
+    &lt;td&gt;Location of the License Document associated to the Status Document.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+    &lt;td&gt;GET&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;link-object&quot;&gt;2.5.2. Link Object&lt;/h4&gt;
+
+&lt;p&gt;Each Link Object contained in links supports the following keys:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Value&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;href&lt;/td&gt;
+    &lt;td&gt;Link location.&lt;/td&gt;
+    &lt;td&gt;URI or URI Template&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;rel&lt;/td&gt;
+    &lt;td&gt;Link relationship to the document.&lt;/td&gt;
+    &lt;td&gt;List of well-known relation values, URIs for extensions&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;title&lt;/td&gt;
+    &lt;td&gt;Title of the link.&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;type&lt;/td&gt;
+    &lt;td&gt;Expected MIME media type value for the external resources.&lt;/td&gt;
+    &lt;td&gt;MIME media type&lt;/td&gt;
+    &lt;td&gt;No, but highly recommended&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;templated&lt;/td&gt;
+    &lt;td&gt;Indicates that the href is a URI Template.&lt;/td&gt;
+    &lt;td&gt;Boolean&lt;/td&gt;
+    &lt;td&gt;No, default value is &quot;false&quot;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;profile&lt;/td&gt;
+    &lt;td&gt;Expected profile used to identify the external resource.&lt;/td&gt;
+    &lt;td&gt;URI&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;potential-rights&quot;&gt;2.6. Potential Rights&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MAY&lt;/b&gt; provide a list of potential changes allowed for a License Document using the &lt;code class=&quot;highlighter-rouge&quot;&gt;potential_rights&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;p&gt;This specification defines the following expression of potential rights:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Key&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;end&lt;/td&gt;
+    &lt;td&gt;Time and Date when the license ends.&lt;/td&gt;
+    &lt;td&gt;ISO 8601 time and date&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;events&quot;&gt;2.7. Events&lt;/h3&gt;
+
+&lt;p&gt;A Status Document &lt;b&gt;MAY&lt;/b&gt; provide an ordered list of events related to the change in status of a License Document.&lt;/p&gt;
+
+&lt;p&gt;These events are documented in an &lt;code class=&quot;highlighter-rouge&quot;&gt;events&lt;/code&gt; object where the following keys are used to describe an event:&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Key&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Format/data type&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;type&lt;/td&gt;
+    &lt;td&gt;Identifies the type of event.&lt;/td&gt;
+    &lt;td&gt;Link relations as defined in section 2. Status Document or in 3. Interactions&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;name&lt;/td&gt;
+    &lt;td&gt;Name of the client, as provided by the client during an interaction.&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;Identifies the client, as provided by the client during an interaction.&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;timestamp&lt;/td&gt;
+    &lt;td&gt;Time and date when the event occurred.&lt;/td&gt;
+    &lt;td&gt;ISO 8601 time and date&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;interactions&quot;&gt;3. Interactions&lt;/h2&gt;
+
+&lt;p&gt;In addition to a standardized document, the LSD Specifications also defines a number of interactions that are all exposed through the &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;h3 id=&quot;handling-errors&quot;&gt;3.1. Handling Errors&lt;/h3&gt;
+
+&lt;p&gt;To provide a consistent behavior for both clients and end users, all servers must handle errors using the Problem Details JSON object as defined in [&lt;a href=&quot;https://tools.ietf.org/html/rfc7807&quot;&gt;RFC7807&lt;/a&gt;] with the following additional requirements:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The server &lt;b&gt;MUST&lt;/b&gt; return a &lt;code class=&quot;highlighter-rouge&quot;&gt;title&lt;/code&gt; and a &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt; in the Problem Details JSON object&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The server &lt;strong&gt;SHOULD&lt;/strong&gt; attempt to localize both &lt;code class=&quot;highlighter-rouge&quot;&gt;title&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;detail&lt;/code&gt; based on the &lt;code class=&quot;highlighter-rouge&quot;&gt;Accept-Language&lt;/code&gt; header sent by the client&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Each interaction in this specification provides a number of Problem Types that are returned to the client if the interaction fails.&lt;/p&gt;
+
+&lt;h3 id=&quot;checking-the-status-of-a-license&quot;&gt;3.2. Checking the Status of a License&lt;/h3&gt;
+
+&lt;p&gt;A client &lt;strong&gt;SHOULD&lt;/strong&gt; on a regular basis retrieve a Status Document in order to update a License Document.&lt;/p&gt;
+
+&lt;p&gt;If the &lt;code class=&quot;highlighter-rouge&quot;&gt;license&lt;/code&gt; timestamp in the &lt;code class=&quot;highlighter-rouge&quot;&gt;updated&lt;/code&gt; object of the Status Document is more recent than the timestamp contained in the local copy of the License Document, the client &lt;b&gt;MUST&lt;/b&gt; download the License Document again and replace its previous copy with the new one.&lt;/p&gt;
+
+&lt;p&gt;If the &lt;code class=&quot;highlighter-rouge&quot;&gt;status&lt;/code&gt; value of a Status Document contradicts the corresponding up-to-date License Document, the License Document takes precedence.&lt;/p&gt;
+
+&lt;p&gt;If the Status Document is unavailable or if the client is unable to obtain an internet connection, it &lt;b&gt;MUST NOT&lt;/b&gt; block the user from accessing the Publication tied to the License Document.&lt;/p&gt;
+
+&lt;h3 id=&quot;registering-a-device&quot;&gt;3.3. Registering a Device&lt;/h3&gt;
+
+&lt;p&gt;Registration is meant to provide the server with a hint of how many clients have interacted with a License Document.&lt;/p&gt;
+
+&lt;p&gt;When a client opens a License Document for the first time and gets access to its associated Status Document:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; attempt to register itself using the link exposed in the Status Document&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST NOT&lt;/b&gt; block the user from accessing the Publication associated to the License Document if the registration fails&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It &lt;b&gt;MUST&lt;/b&gt; attempt to register itself again if it couldn’t do so the first time that the License Document was opened&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;During the registration, the client &lt;b&gt;MUST&lt;/b&gt; always send the same unique identifier for a specific device, no matter which Status Document it interacts with. Any further interaction &lt;strong&gt;SHOULD&lt;/strong&gt; use the same identifier/name.&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Templated?&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+    &lt;th&gt;HTTP Verb&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;register&lt;/td&gt;
+    &lt;td&gt;Associate a new device with the License&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+    &lt;td&gt;POST&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Parameter&lt;/th&gt;
+    &lt;th&gt;Format&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required ?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;A unique identifier for the device.&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;name&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;Human readable name for the device.&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;An example of a simple activation link.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;register&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/aaa-bbbb-ccc/register{?id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.license.status.v1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Expected Behavior&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Server side behavior&lt;/th&gt;
+    &lt;th&gt;HTTP status code&lt;/th&gt;
+    &lt;th&gt;Client side behavior&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;The server registers the device identified by 'id' and returns an updated Status Document.
+The server &lt;b&gt;MUST&lt;/b&gt; update the timestamp of the Status Document contained in the status key of the updated object. 
+
+If the status was previously set to ready, it &lt;b&gt;MUST&lt;/b&gt; be updated by the server to active instead.
+
+The server &lt;b&gt;MAY&lt;/b&gt; also add a new event in the events object of the Status Document.&lt;/td&gt;
+    &lt;td&gt;200&lt;/td&gt;
+    &lt;td&gt;The client &lt;b&gt;MUST NOT&lt;/b&gt; attempt to register the device again.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;Failure Modes&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Type&lt;/th&gt;
+    &lt;th&gt;Status Code&lt;/th&gt;
+    &lt;th&gt;Title&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/registration&lt;/td&gt;
+    &lt;td&gt;400&lt;/td&gt;
+    &lt;td&gt;Your device could not be registered properly.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/server&lt;/td&gt;
+    &lt;td&gt;5xx&lt;/td&gt;
+    &lt;td&gt;An unexpected error has occurred.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;returning-a-publication&quot;&gt;3.4. Returning a Publication&lt;/h3&gt;
+
+&lt;p&gt;Returning a publication is meant primarily for library use cases, where a patron can return a publication early in order to get access to a new loan.&lt;/p&gt;
+
+&lt;p&gt;If returning is unsuccessful, the client &lt;strong&gt;SHOULD&lt;/strong&gt; attempt to return the License again at a later time without necessarily asking the user again.&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Templated?&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+    &lt;th&gt;HTTP Verb&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;return&lt;/td&gt;
+    &lt;td&gt;Ask for the License to be immediately invalidated.&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+    &lt;td&gt;PUT&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt; Parameter&lt;/th&gt;
+    &lt;th&gt;Format&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required ?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;A unique identifier for the device.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;name&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;Human readable name for the device.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;An example of a simple return link.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;return&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/aaa-bbbb-ccc/return{?id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.lcp.license-1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Expected Behavior&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Server side behavior&lt;/th&gt;
+    &lt;th&gt;HTTP status code&lt;/th&gt;
+    &lt;th&gt;Client side behavior&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;The server &lt;b&gt;MUST&lt;/b&gt; return an updated Status Document.
+The Status Document &lt;b&gt;MUST&lt;/b&gt; also return a `status` with its value set to &quot;returned&quot; if the status was previously set to &quot;active&quot; or &quot;cancelled&quot; if the status was previously set to &quot;ready&quot;.
+
+The server &lt;b&gt;MUST&lt;/b&gt; update the timestamp of both License and Status Document contained in the `status` and `license` keys of the `updated` object. 
+
+The server &lt;b&gt;MAY&lt;/b&gt; also add a new event in the `events` object of the Status Document.&lt;/td&gt;
+    &lt;td&gt;200&lt;/td&gt;
+    &lt;td&gt;The client &lt;b&gt;MUST&lt;/b&gt; download an updated License Document.
+
+The client &lt;b&gt;MUST NOT&lt;/b&gt; allow the user to open the publication anymore. 
+
+The client &lt;b&gt;MUST NOT&lt;/b&gt; attempt to return the License anymore.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;Failure Modes&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Type&lt;/th&gt;
+    &lt;th&gt;Status Code&lt;/th&gt;
+    &lt;th&gt;Title&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/return&lt;/td&gt;
+    &lt;td&gt;400&lt;/td&gt;
+    &lt;td&gt;Your publication could not be returned properly.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/return/already&lt;/td&gt;
+    &lt;td&gt;403&lt;/td&gt;
+    &lt;td&gt;Your publication has already been returned before.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/return/expired&lt;/td&gt;
+    &lt;td&gt;403&lt;/td&gt;
+    &lt;td&gt;Your publication has already expired.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/server&lt;/td&gt;
+    &lt;td&gt;5xx&lt;/td&gt;
+    &lt;td&gt;An unexpected error has occurred.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;renewing-a-license&quot;&gt;3.5. Renewing a License&lt;/h3&gt;
+
+&lt;p&gt;Renewing a License is also meant primarily for library use cases, where a patron can renew a loan for an extended period of time.&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;renew&lt;/td&gt;
+    &lt;td&gt;Extends the expiration date of a license into the future&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Media Type&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Templated?&lt;/th&gt;
+    &lt;th&gt;Verb&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;text/html&lt;/td&gt;
+    &lt;td&gt;A URL where human interactions will be required. These interactions **SHOULD** ultimately result in the extension of the term of a License Document.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+    &lt;td&gt;GET&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;application/vnd.readium.lcp.license-1.0+json&lt;/td&gt;
+    &lt;td&gt;A URL where the License Document can be programmatically renewed.&lt;/td&gt;
+    &lt;td&gt;Yes&lt;/td&gt;
+    &lt;td&gt;PUT&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+These parameters are strictly for the case where the link returns a License Document.&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Parameter&lt;/th&gt;
+    &lt;th&gt;Format&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required ?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;id&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;A unique identifier for the device.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;name&lt;/td&gt;
+    &lt;td&gt;String&lt;/td&gt;
+    &lt;td&gt;Human readable name for the device.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;end&lt;/td&gt;
+    &lt;td&gt;ISO 8601&lt;/td&gt;
+    &lt;td&gt;A new expiration date for the license&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;em&gt;An example with two renewal links: one meant for human interactions (HTML) and another for clients that can send the proper information to the server (returns a License Document).&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;renew&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/aaa-bbbb-ccc/renew&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/html&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;rel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;renew&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.org/license/aaa-bbbb-ccc/renew{?end,id,name}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;application/vnd.readium.lcp.license-1.0+json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;These status codes and behaviors are strictly for the case where the link returns a License Document.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Expected Behavior&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Server side behavior&lt;/td&gt;
+    &lt;td&gt;HTTP status code&lt;/td&gt;
+    &lt;td&gt;Client side behavior&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;The server &lt;b&gt;MUST&lt;/b&gt; return an updated Status Document.
+The server &lt;b&gt;MUST&lt;/b&gt; update the timestamp of both License and Status Document contained in the `status` and `license` keys of the `updated` object. 
+
+The server &lt;b&gt;MAY&lt;/b&gt; also add a new event in the `events` object of the Status Document.&lt;/td&gt;
+    &lt;td&gt;200&lt;/td&gt;
+    &lt;td&gt;The client &lt;b&gt;MUST&lt;/b&gt; download an updated License Document.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Failure Modes&lt;/em&gt;&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Type&lt;/th&gt;
+    &lt;th&gt;Status Code&lt;/th&gt;
+    &lt;th&gt;Title&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/renew&lt;/td&gt;
+    &lt;td&gt;4xx&lt;/td&gt;
+    &lt;td&gt;Your publication could not be renewed properly.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/renew/date&lt;/td&gt;
+    &lt;td&gt;403&lt;/td&gt;
+    &lt;td&gt;Incorrect renewal period, your publication could not be renewed.&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;http://readium.org/license-status-document/error/server&lt;/td&gt;
+    &lt;td&gt;5xx&lt;/td&gt;
+    &lt;td&gt;An unexpected error has occurred.&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;relationship-to-readium-licensed-content-protection-10&quot;&gt;4. Relationship to Readium Licensed Content Protection 1.0&lt;/h2&gt;
+
+&lt;h3 id=&quot;introduction&quot;&gt;4.1. Introduction&lt;/h3&gt;
+
+&lt;p class=&quot;information&quot;&gt;&lt;strong&gt;This section is informative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This specification defines a way for a Content Provider to connect a Readium LCP License Document to a Status Document describing the current status of the underlying license.&lt;/p&gt;
+
+&lt;p&gt;It does not add any structural elements to the LCP License Document, but the link relations it defines and the potential rights it enumerates &lt;b&gt;MAY&lt;/b&gt; appear in a Readium LCP License Document.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-status-relation&quot;&gt;4.2. The status Relation&lt;/h3&gt;
+
+&lt;p&gt;This specification defines one new link relation which may be used in the &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object of an LCP License Document.&lt;/p&gt;
+
+&lt;table class=&quot;table-bordered large&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Relation&lt;/th&gt;
+    &lt;th&gt;Semantics&lt;/th&gt;
+    &lt;th&gt;Required?&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;status&lt;/td&gt;
+    &lt;td&gt;Location of the Status Document associated with this License Document.&lt;/td&gt;
+    &lt;td&gt;No&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;If a link with the relation status is not present in the &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object, the client &lt;b&gt;MUST&lt;/b&gt; process the LCP License Document according to the core LCP specification.&lt;/p&gt;
+
+&lt;p&gt;If a link with the relation status is present in the &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object, the client &lt;b&gt;MUST&lt;/b&gt; process the Status Document according to the extended rules listed in &lt;a href=&quot;#heading=h.7agurmogq68s&quot;&gt;section 3&lt;/a&gt; of this specification.&lt;/p&gt;
+
+&lt;p&gt;The representation of the URI mentioned in the status link &lt;b&gt;MUST&lt;/b&gt; be a valid Status Document.&lt;/p&gt;
+
+&lt;h2 id=&quot;normative-references&quot;&gt;Normative references&lt;/h2&gt;
+
+&lt;p&gt;[JSON] &lt;a href=&quot;http://www.ietf.org/rfc/rfc4627&quot;&gt;The application/json Media Type for JavaScript Object Notation (JSON)&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;[Publications] *&lt;a href=&quot;http://www.idpf.org/epub/301/spec/epub-publications.html&quot;&gt;EPUB Publications 3.0.*1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;HTTP&lt;/p&gt;
+
+&lt;p&gt;URI Template&lt;/p&gt;
+
+&lt;p&gt;LCP&lt;/p&gt;
+</description>
+        <pubDate>Tue, 22 Nov 2016 10:00:00 +0100</pubDate>
+        <link>http://localhost:4000/lsd-specs/</link>
+        <guid isPermaLink="true">http://localhost:4000/lsd-specs/</guid>
+        
+        
+        <category>specifications</category>
+        
+      </item>
     
       <item>
         <title>Readium LCP Specifications</title>
@@ -20,25 +2221,25 @@
 
 &lt;h3 id=&quot;published-documents&quot;&gt;Published documents&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://readium.github.io/drm/lcp1-0.html&quot;&gt;Readium Licensed Content Protection (LCP) 1.0&lt;/a&gt; defines a standard License Document and an Encryption Profile for encrypting resources in EPUB 3 Publications, expressing rights and restrictions, and for securely delivering decryption keys to Reading Systems via licenses for specific Users. Readium LCP also defines a simple passphrase-based authentication method for Reading Systems to access encrypted resources and verify a license.&lt;/p&gt;
+&lt;p&gt;Readium Licensed Content Protection (LCP) 1.0 defines a standard License Document and an Encryption Profile for encrypting resources in EPUB 3 Publications, expressing rights and restrictions, and for securely delivering decryption keys to Reading Systems via licenses for specific Users. Readium LCP also defines a simple passphrase-based authentication method for Reading Systems to access encrypted resources and verify a license.&lt;/p&gt;
 
-&lt;p&gt;&amp;gt; See also: &lt;a href=&quot;https://github.com/readium/readium.github.io&quot;&gt;GitHub repository&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://readium.github.io/drm/lsd1-0.html&quot;&gt;Readium License Status Document 1.0&lt;/a&gt; defines a standard Status Document for representing the status of a DRM license along with interactions that might affect its status. These interactions put additional responsibilities on both Content Providers and Reading Systems. One of the primary objectives is to support lending in public libraries where a user may have the ability to renew a time-limited loan or cancel one before it expires.&lt;/p&gt;
-
-&lt;p&gt;&amp;gt; See also: &lt;a href=&quot;https://github.com/readium/readium.github.io&quot;&gt;GitHub repository&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Readium License Status Document 1.0 defines a standard Status Document for representing the status of a DRM license along with interactions that might affect its status. These interactions put additional responsibilities on both Content Providers and Reading Systems. One of the primary objectives is to support lending in public libraries where a user may have the ability to renew a time-limited loan or cancel one before it expires.&lt;/p&gt;
 
 &lt;h3 id=&quot;open-source-software&quot;&gt;Open-source software&lt;/h3&gt;
 
 &lt;p&gt;The Readium repositories relative to Readium LCP are currently still private, as the core development team is working on providing a working testbed for Readium LCP deployments.&lt;/p&gt;
 
-&lt;p&gt;The Readium LCP Client library, written in C++, is very easy to deploy as a “content module” in a Reading System based on the Readium SDK. It’s code may be adapted to any other Reading System implementation.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Readium LCP Client library&lt;/strong&gt;, written in C++, is very easy to deploy as a “content module” in a Reading System based on the Readium SDK. It’s code may be adapted to any other Reading System implementation.&lt;/p&gt;
 
-&lt;p&gt;&amp;gt; Download it on: &lt;a href=&quot;https://github.com/readium/readium-lcp-client&quot;&gt;GitHub repository&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Download it on: &lt;a href=&quot;https://github.com/readium/readium-lcp-client&quot;&gt;GitHub repository&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;The multi-platform reference Readium LCP Server is written in Golang. It provides a command line utility for content encryption, a Readium LCP License Server and a License Status Server. The REST API allows for a seamless integration with front-end systems and offers immediate interaction with Readium LCP compliant Reading Systems.  &lt;/p&gt;
+&lt;p&gt;The multi-platform reference &lt;strong&gt;Readium LCP Server&lt;/strong&gt; is written in Golang. It provides a command line utility for content encryption, a Readium LCP License Server and a License Status Server. The REST API allows for a seamless integration with front-end systems and offers immediate interaction with Readium LCP compliant Reading Systems.&lt;/p&gt;
 
-&lt;p&gt;&amp;gt; Download it on: &lt;a href=&quot;https://github.com/readium/readium-lcp-server&quot;&gt;GitHub repository&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Download it on: &lt;a href=&quot;https://github.com/readium/readium-lcp-server&quot;&gt;GitHub repository&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         <pubDate>Tue, 15 Nov 2016 11:30:00 +0100</pubDate>
         <link>http://localhost:4000/lcp-specs/</link>

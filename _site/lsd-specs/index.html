@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <link rel="profile" href="http://www.w3.org/1999/xhtml/vocab" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="canonical" href="http://localhost:4000/lsd-specs/">
+  <title>Readium LSD Specifications</title>
+  <meta name="description" content="1. Overview">
+  <link rel="stylesheet" type="text/css" href="/css/system.base.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/date.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/datepicker.1.7.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/field.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/node.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/views.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/ctools.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/fonts.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+  <!-- HTML5 element support for IE6-8 -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="/js/jquery.min.js?v=1.11.2"></script>
+  <script src="/js/jquery.once.js?v=1.2"></script>
+
+  
+
+  <script src="/js/bootstrap/affix.js"></script>
+  <script src="/js/bootstrap/alert.js"></script>
+  <script src="/js/bootstrap/button.js"></script>
+  <script src="/js/bootstrap/carousel.js"></script>
+  <script src="/js/bootstrap/collapse.js"></script>
+  <script src="/js/bootstrap/dropdown.js"></script>
+  <script src="/js/bootstrap/modal.js"></script>
+  <script src="/js/bootstrap/tooltip.js"></script>
+  <script src="/js/bootstrap/popover.js"></script>
+  <script src="/js/bootstrap/scrollspy.js"></script>
+  <script src="/js/bootstrap/tab.js"></script>
+  <script src="/js/bootstrap/transition.js"></script>
+</head>
+
+  <body role="document">
+
+    <div class="navbar-wrapper">
+
+      <header id="navbar" role="banner" class="navbar container navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="logo navbar-btn pull-left" href="http://readium.org/">
+        <img src="/assets/logos/readium-logo.png" alt="Home" />
+      </a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse">
+      <nav role="navigation">
+        
+        <ul class="menu nav navbar-nav">
+
+<!--             <li class="first expanded dropdown"><a class="page-link" href=""></a></li> -->
+
+              
+
+              <li class="first expanded dropdown">
+                <a href="/membership" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">About <span class="caret"></span></a>
+                  
+        <ul class="dropdown-menu">
+              <li class="first leaf">
+                <a href="http://readium.org/about/project-goals">Project Goals</a>
+              </li>
+              <li class="leaf">
+                <a href="http://readium.org/about/applications-based-on-readium">Applications Based on Readium</a>
+                    </li>
+                  </ul>
+              </li>
+
+              <li class="first leaf">
+                <a href="/table-of-contents/">Table Of Contents</a>
+              </li>
+
+
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+      
+    </div>
+    <div class="main-container-wrapper">
+
+      <div class="breadcrumbs">
+  <div class="container">
+    <ol class="breadcrumb">
+      <li><a href="http://readium.org">Home</a></li>
+      <li><a href="/" class="active-trail">Readium Projects</a></li>
+      <li class="active">Readium LSD Specifications</li>
+    </ol>
+  </div>
+</div>
+
+<div class="main-container container">
+  <div class="row">
+    <section class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+      <article itemscope itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+          <h1 class="post-title"  itemprop="name headline">Readium LSD Specifications</h1>
+          <p class="post-meta"><time datetime="2016-11-22T10:00:00+01:00" itemprop="datePublished">Nov 22, 2016</time></p>
+        </header>
+        <hr>
+
+        <div class="post-content" itemprop="articleBody">
+          <h2 id="overview">1. Overview</h2>
+
+<h3 id="purpose-and-scope">1.1 Purpose and Scope</h3>
+
+<p class="information"><strong>This section is informative</strong></p>
+
+<p>This specification, License Status Document (1.0), defines a document for representing the status of a DRM license along with interactions that might affect its status. These interactions put additional responsibilities on both Content Providers and Reading Systems.</p>
+
+<p>One of the primary objectives is to support lending in public libraries where a user may have the ability to renew a time-limited loan or cancel one before it expires.</p>
+
+<h3 id="terminology">1.2. Terminology</h3>
+
+<p>This specification uses the following EPUB and Readium-LCP terms:</p>
+
+<p><strong>Publication</strong></p>
+
+<p>A logical document entity consisting of a set of interrelated <a href="http://www.idpf.org/epub/30/spec/#gloss-publication-resource-cmt-or-foreign">resources</a> and packaged in an EPUB Container, as defined by the <a href="http://www.idpf.org/epub/30/spec/#sibling-specs">EPUB 3 specifications</a>.</p>
+
+<p><strong>User</strong></p>
+
+<p>An individual that consumes an EPUB Publication using an EPUB Reading System.</p>
+
+<p><strong>EPUB Reading System (or Reading System)</strong></p>
+
+<p>A system that processes EPUB Publications for presentation to a User in a manner conformant with the <a href="http://www.idpf.org/epub/30/spec/#sibling-specs">EPUB 3 specifications</a>.</p>
+
+<p>Additionally, it uses the following terms:</p>
+
+<p><strong>Content Provider</strong></p>
+
+<p>In Readium-LCP, the authority that grants the License Document and the Publication to the User, usually a Web Server.</p>
+
+<p><strong>License Document</strong></p>
+
+<p>Document that contains references to the various keys and restrictions that are applied by a specific DRM on a Publication.</p>
+
+<p><strong>Status Document</strong></p>
+
+<p>Document that contains information about the history of a License Document, along with its current status and available interactions.</p>
+
+<h3 id="example">1.3. Example</h3>
+
+<p class="information"><strong>This section is informative</strong></p>
+
+<p><em> In the following example, the Status Document indicates that the License has been activated on a single device and can be updated if wanted.</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"234-5435-3453-345354"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your license is currently active and has been used on at least one device."</span><span class="p">,</span><span class="w">
+
+  </span><span class="nt">"updated"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-05T00:00:00Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-08T00:00:00Z"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="nt">"links"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"license"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/35d9b2d6"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.lcp.license.v1.0+json"</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"register"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/35d9b2d6/register{?id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.license.status.v1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"return"</span><span class="p">,</span><span class="w"> 
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/35d9b2d6/return{?id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.lcp.license.v1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"renew"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/35d9b2d6/renew"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text/html"</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"renew"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/35d9b2d6/renew{?end,id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.lcp.license.v1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"potential_rights"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-09-13T00:00:00Z"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"activate"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eBook App (Android)"</span><span class="p">,</span><span class="w"> </span><span class="nt">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-14T00:00:00Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"709e1380-3528-11e5-a2cb-0800200c9a66"</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<h3 id="conformance-statements">1.4 Conformance Statements</h3>
+
+<p>The keywords <b>MUST</b>, <b>MUST NOT</b>, <b>REQUIRED</b>, <b>SHALL</b>, <b>SHALL NOT</b>, <b>SHOULD</b>, <b>SHOULD NOT</b>, <b>RECOMMENDED</b>, <b>MAY</b>, and <b>OPTIONAL</b> in this document are to be interpreted as described in <a href="https://docs.google.com/document/d/1yLX0GfSxN8a5JGJmbXlbWYAI63KGDrHACp4BwByGpV0/edit#bookmark=id.4v706jdntcjd">[RFC2119]</a>.</p>
+
+<p>All sections of this specification are normative except where identified by the informative status label “This section is informative”. The application of informative status to sections and appendices applies to all child content and subsections they may contain.</p>
+
+<p>All examples in this specification are informative.</p>
+
+<h2 id="status-document">2. Status Document</h2>
+
+<h3 id="content-conformance">2.1. Content Conformance</h3>
+
+<p>A Status Document <b>MUST</b> meet all of the following criteria:</p>
+
+<p>Document properties</p>
+
+<p>It <b>MUST</b> meet the conformance constraints for JSON documents as defined in [JSON].
+It <b>MUST</b> parse as a single JSON object.
+It <b>MUST</b> be encoded using UTF-8.</p>
+
+<p>Access to a Status Document <b>MUST NOT</b> require any form of authentication.</p>
+
+<p>A Status Document <b>SHOULD NOT*</b>be served over an insecure connection.</p>
+
+<p>The MIME media type for a Status Document is <code class="highlighter-rouge">application/vnd.readium.license.status.v1.0+json</code>, and HTTP servers <b>MUST</b> set the “Content-Type” header appropriately.</p>
+
+<h3 id="core-information">2.2. Core Information</h3>
+
+<p>A Status Document <b>MUST</b> include the following information:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Key</th>
+    <th>Semantics</th>
+    <th>Format/data type</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>Unique identifier for the License Document associated to the Status Document.</td>
+    <td>String</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>Current status of the License.</td>
+    <td>Controlled vocabulary, as defined in section 2.3</td>
+  </tr>
+  <tr>
+    <td>message</td>
+    <td>A message meant to be displayed to the User regarding the current status of the license.</td>
+    <td>String</td>
+  </tr>
+</table>
+
+<p><br />
+All messages provided in the message key <strong>SHOULD</strong> be localized based on the HTTP <code class="highlighter-rouge">Accept-Language</code> header included in the request for the Status Document.</p>
+
+<h3 id="status">2.3. Status</h3>
+
+<p>The <code class="highlighter-rouge">status</code> field succinctly describes the current status of the license. 
+The following values are allowed:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>ready</td>
+    <td>The License Document is available, but the user hasn't accessed the License and/or Status Document yet.</td>
+  </tr>
+  <tr>
+    <td>active</td>
+    <td>The license is active, and a device has been successfully registered for this license.
+This is the default value if the License Document does not contain a registration link, or a registration mechanism through the license itself.</td>
+  </tr>
+  <tr>
+    <td>revoked</td>
+    <td>The license is no longer active, it has been invalidated by the Issuer.</td>
+  </tr>
+  <tr>
+    <td>returned</td>
+    <td>The license is no longer active, it has been invalidated by the User.</td>
+  </tr>
+  <tr>
+    <td>cancelled</td>
+    <td>The license is no longer active because it was cancelled prior to activation.</td>
+  </tr>
+  <tr>
+    <td>expired</td>
+    <td>The license is no longer active because it has expired.</td>
+  </tr>
+</table>
+<h3 id="timestamps">2.4. Timestamps</h3>
+
+<p>A Status Document <b>MUST</b> include an <code class="highlighter-rouge">updated</code> object where the following keys and associated timestamps are provided:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Key</th>
+    <th>Semantics</th>
+    <th>Format/data type</th>
+  </tr>
+  <tr>
+    <td>license</td>
+    <td>Time and Date when the License Document was last updated.</td>
+    <td>ISO 8601 time and date</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>Time and Date when the Status Document was last updated.</td>
+    <td>ISO 8601 time and date</td>
+  </tr>
+</table>
+
+<h3 id="links">2.5. Links</h3>
+
+<p>A Status Document <b>MUST</b> include a <code class="highlighter-rouge">links</code> object.</p>
+
+<p>A Status Document <b>MUST</b> include at least one link where the relation is set to <code class="highlighter-rouge">license</code>.</p>
+
+<h4 id="the-licence-relation">2.5.1 The licence Relation</h4>
+<table class="table-bordered large">
+  <tr>
+    <th>Relation</th>
+    <th>Semantics</th>
+    <th>Templated?</th>
+    <th>Required?</th>
+    <th>HTTP Verb</th>
+  </tr>
+  <tr>
+    <td>license</td>
+    <td>Location of the License Document associated to the Status Document.</td>
+    <td>No</td>
+    <td>Yes</td>
+    <td>GET</td>
+  </tr>
+</table>
+
+<h4 id="link-object">2.5.2. Link Object</h4>
+
+<p>Each Link Object contained in links supports the following keys:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Format/data type</th>
+    <th>Required?</th>
+  </tr>
+  <tr>
+    <td>href</td>
+    <td>Link location.</td>
+    <td>URI or URI Template</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>rel</td>
+    <td>Link relationship to the document.</td>
+    <td>List of well-known relation values, URIs for extensions</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>title</td>
+    <td>Title of the link.</td>
+    <td>String</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>type</td>
+    <td>Expected MIME media type value for the external resources.</td>
+    <td>MIME media type</td>
+    <td>No, but highly recommended</td>
+  </tr>
+  <tr>
+    <td>templated</td>
+    <td>Indicates that the href is a URI Template.</td>
+    <td>Boolean</td>
+    <td>No, default value is "false"</td>
+  </tr>
+  <tr>
+    <td>profile</td>
+    <td>Expected profile used to identify the external resource.</td>
+    <td>URI</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h3 id="potential-rights">2.6. Potential Rights</h3>
+
+<p>A Status Document <b>MAY</b> provide a list of potential changes allowed for a License Document using the <code class="highlighter-rouge">potential_rights</code> object.</p>
+
+<p>This specification defines the following expression of potential rights:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Key</th>
+    <th>Semantics</th>
+    <th>Format/data type</th>
+  </tr>
+  <tr>
+    <td>end</td>
+    <td>Time and Date when the license ends.</td>
+    <td>ISO 8601 time and date</td>
+  </tr>
+</table>
+
+<h3 id="events">2.7. Events</h3>
+
+<p>A Status Document <b>MAY</b> provide an ordered list of events related to the change in status of a License Document.</p>
+
+<p>These events are documented in an <code class="highlighter-rouge">events</code> object where the following keys are used to describe an event:</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Key</th>
+    <th>Semantics</th>
+    <th>Format/data type</th>
+  </tr>
+  <tr>
+    <td>type</td>
+    <td>Identifies the type of event.</td>
+    <td>Link relations as defined in section 2. Status Document or in 3. Interactions</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>Name of the client, as provided by the client during an interaction.</td>
+    <td>String</td>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>Identifies the client, as provided by the client during an interaction.</td>
+    <td>String</td>
+  </tr>
+  <tr>
+    <td>timestamp</td>
+    <td>Time and date when the event occurred.</td>
+    <td>ISO 8601 time and date</td>
+  </tr>
+</table>
+
+<h2 id="interactions">3. Interactions</h2>
+
+<p>In addition to a standardized document, the LSD Specifications also defines a number of interactions that are all exposed through the <code class="highlighter-rouge">links</code> object.</p>
+
+<h3 id="handling-errors">3.1. Handling Errors</h3>
+
+<p>To provide a consistent behavior for both clients and end users, all servers must handle errors using the Problem Details JSON object as defined in [<a href="https://tools.ietf.org/html/rfc7807">RFC7807</a>] with the following additional requirements:</p>
+
+<ul>
+  <li>
+    <p>The server <b>MUST</b> return a <code class="highlighter-rouge">title</code> and a <code class="highlighter-rouge">type</code> in the Problem Details JSON object</p>
+  </li>
+  <li>
+    <p>The server <strong>SHOULD</strong> attempt to localize both <code class="highlighter-rouge">title</code> and <code class="highlighter-rouge">detail</code> based on the <code class="highlighter-rouge">Accept-Language</code> header sent by the client</p>
+  </li>
+</ul>
+
+<p>Each interaction in this specification provides a number of Problem Types that are returned to the client if the interaction fails.</p>
+
+<h3 id="checking-the-status-of-a-license">3.2. Checking the Status of a License</h3>
+
+<p>A client <strong>SHOULD</strong> on a regular basis retrieve a Status Document in order to update a License Document.</p>
+
+<p>If the <code class="highlighter-rouge">license</code> timestamp in the <code class="highlighter-rouge">updated</code> object of the Status Document is more recent than the timestamp contained in the local copy of the License Document, the client <b>MUST</b> download the License Document again and replace its previous copy with the new one.</p>
+
+<p>If the <code class="highlighter-rouge">status</code> value of a Status Document contradicts the corresponding up-to-date License Document, the License Document takes precedence.</p>
+
+<p>If the Status Document is unavailable or if the client is unable to obtain an internet connection, it <b>MUST NOT</b> block the user from accessing the Publication tied to the License Document.</p>
+
+<h3 id="registering-a-device">3.3. Registering a Device</h3>
+
+<p>Registration is meant to provide the server with a hint of how many clients have interacted with a License Document.</p>
+
+<p>When a client opens a License Document for the first time and gets access to its associated Status Document:</p>
+
+<ul>
+  <li>
+    <p>It <b>MUST</b> attempt to register itself using the link exposed in the Status Document</p>
+  </li>
+  <li>
+    <p>It <b>MUST NOT</b> block the user from accessing the Publication associated to the License Document if the registration fails</p>
+  </li>
+  <li>
+    <p>It <b>MUST</b> attempt to register itself again if it couldn’t do so the first time that the License Document was opened</p>
+  </li>
+</ul>
+
+<p>During the registration, the client <b>MUST</b> always send the same unique identifier for a specific device, no matter which Status Document it interacts with. Any further interaction <strong>SHOULD</strong> use the same identifier/name.</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Relation</th>
+    <th>Semantics</th>
+    <th>Templated?</th>
+    <th>Required?</th>
+    <th>HTTP Verb</th>
+  </tr>
+  <tr>
+    <td>register</td>
+    <td>Associate a new device with the License</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>POST</td>
+  </tr>
+</table>
+
+<p><br /></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Parameter</th>
+    <th>Format</th>
+    <th>Semantics</th>
+    <th>Required ?</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>String</td>
+    <td>A unique identifier for the device.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>String</td>
+    <td>Human readable name for the device.</td>
+    <td>Yes</td>
+  </tr>
+</table>
+
+<p><br /></p>
+
+<p><em>An example of a simple activation link.</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"links"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"register"</span><span class="p">,</span><span class="w"> 
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/aaa-bbbb-ccc/register{?id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.license.status.v1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><em>Expected Behavior</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Server side behavior</th>
+    <th>HTTP status code</th>
+    <th>Client side behavior</th>
+  </tr>
+  <tr>
+    <td>The server registers the device identified by 'id' and returns an updated Status Document.
+The server <b>MUST</b> update the timestamp of the Status Document contained in the status key of the updated object. 
+
+If the status was previously set to ready, it <b>MUST</b> be updated by the server to active instead.
+
+The server <b>MAY</b> also add a new event in the events object of the Status Document.</td>
+    <td>200</td>
+    <td>The client <b>MUST NOT</b> attempt to register the device again.</td>
+  </tr>
+</table>
+
+<p><br />
+<em>Failure Modes</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Type</th>
+    <th>Status Code</th>
+    <th>Title</th>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/registration</td>
+    <td>400</td>
+    <td>Your device could not be registered properly.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/server</td>
+    <td>5xx</td>
+    <td>An unexpected error has occurred.</td>
+  </tr>
+</table>
+
+<h3 id="returning-a-publication">3.4. Returning a Publication</h3>
+
+<p>Returning a publication is meant primarily for library use cases, where a patron can return a publication early in order to get access to a new loan.</p>
+
+<p>If returning is unsuccessful, the client <strong>SHOULD</strong> attempt to return the License again at a later time without necessarily asking the user again.</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Relation</th>
+    <th>Semantics</th>
+    <th>Templated?</th>
+    <th>Required?</th>
+    <th>HTTP Verb</th>
+  </tr>
+  <tr>
+    <td>return</td>
+    <td>Ask for the License to be immediately invalidated.</td>
+    <td>Yes</td>
+    <td>No</td>
+    <td>PUT</td>
+  </tr>
+</table>
+
+<p><br /></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th> Parameter</th>
+    <th>Format</th>
+    <th>Semantics</th>
+    <th>Required ?</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>String</td>
+    <td>A unique identifier for the device.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>String</td>
+    <td>Human readable name for the device.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<p><br />
+<em>An example of a simple return link.</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"links"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"return"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/aaa-bbbb-ccc/return{?id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.lcp.license-1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p><em>Expected Behavior</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Server side behavior</th>
+    <th>HTTP status code</th>
+    <th>Client side behavior</th>
+  </tr>
+  <tr>
+    <td>The server <b>MUST</b> return an updated Status Document.
+The Status Document <b>MUST</b> also return a `status` with its value set to "returned" if the status was previously set to "active" or "cancelled" if the status was previously set to "ready".
+
+The server <b>MUST</b> update the timestamp of both License and Status Document contained in the `status` and `license` keys of the `updated` object. 
+
+The server <b>MAY</b> also add a new event in the `events` object of the Status Document.</td>
+    <td>200</td>
+    <td>The client <b>MUST</b> download an updated License Document.
+
+The client <b>MUST NOT</b> allow the user to open the publication anymore. 
+
+The client <b>MUST NOT</b> attempt to return the License anymore.</td>
+  </tr>
+</table>
+
+<p><br />
+<em>Failure Modes</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Type</th>
+    <th>Status Code</th>
+    <th>Title</th>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/return</td>
+    <td>400</td>
+    <td>Your publication could not be returned properly.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/return/already</td>
+    <td>403</td>
+    <td>Your publication has already been returned before.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/return/expired</td>
+    <td>403</td>
+    <td>Your publication has already expired.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/server</td>
+    <td>5xx</td>
+    <td>An unexpected error has occurred.</td>
+  </tr>
+</table>
+
+<h3 id="renewing-a-license">3.5. Renewing a License</h3>
+
+<p>Renewing a License is also meant primarily for library use cases, where a patron can renew a loan for an extended period of time.</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Relation</th>
+    <th>Semantics</th>
+    <th>Required?</th>
+  </tr>
+  <tr>
+    <td>renew</td>
+    <td>Extends the expiration date of a license into the future</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Media Type</th>
+    <th>Semantics</th>
+    <th>Templated?</th>
+    <th>Verb</th>
+  </tr>
+  <tr>
+    <td>text/html</td>
+    <td>A URL where human interactions will be required. These interactions **SHOULD** ultimately result in the extension of the term of a License Document.</td>
+    <td>No</td>
+    <td>GET</td>
+  </tr>
+  <tr>
+    <td>application/vnd.readium.lcp.license-1.0+json</td>
+    <td>A URL where the License Document can be programmatically renewed.</td>
+    <td>Yes</td>
+    <td>PUT</td>
+  </tr>
+</table>
+
+<p><br />
+These parameters are strictly for the case where the link returns a License Document.</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Parameter</th>
+    <th>Format</th>
+    <th>Semantics</th>
+    <th>Required ?</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>String</td>
+    <td>A unique identifier for the device.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>String</td>
+    <td>Human readable name for the device.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>end</td>
+    <td>ISO 8601</td>
+    <td>A new expiration date for the license</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<p><br />
+<em>An example with two renewal links: one meant for human interactions (HTML) and another for clients that can send the proper information to the server (returns a License Document).</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"links"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"renew"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/license/aaa-bbbb-ccc/renew"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text/html"</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"rel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"renew"</span><span class="w">
+     </span><span class="s2">"href"</span><span class="err">:</span><span class="w"> </span><span class="s2">"http://example.org/license/aaa-bbbb-ccc/renew{?end,id,name}"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/vnd.readium.lcp.license-1.0+json"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"templated"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>These status codes and behaviors are strictly for the case where the link returns a License Document.</p>
+
+<p><em>Expected Behavior</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <td>Server side behavior</td>
+    <td>HTTP status code</td>
+    <td>Client side behavior</td>
+  </tr>
+  <tr>
+    <td>The server <b>MUST</b> return an updated Status Document.
+The server <b>MUST</b> update the timestamp of both License and Status Document contained in the `status` and `license` keys of the `updated` object. 
+
+The server <b>MAY</b> also add a new event in the `events` object of the Status Document.</td>
+    <td>200</td>
+    <td>The client <b>MUST</b> download an updated License Document.</td>
+  </tr>
+</table>
+<p><br /></p>
+
+<p><em>Failure Modes</em></p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Type</th>
+    <th>Status Code</th>
+    <th>Title</th>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/renew</td>
+    <td>4xx</td>
+    <td>Your publication could not be renewed properly.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/renew/date</td>
+    <td>403</td>
+    <td>Incorrect renewal period, your publication could not be renewed.</td>
+  </tr>
+  <tr>
+    <td>http://readium.org/license-status-document/error/server</td>
+    <td>5xx</td>
+    <td>An unexpected error has occurred.</td>
+  </tr>
+</table>
+
+<h2 id="relationship-to-readium-licensed-content-protection-10">4. Relationship to Readium Licensed Content Protection 1.0</h2>
+
+<h3 id="introduction">4.1. Introduction</h3>
+
+<p class="information"><strong>This section is informative</strong></p>
+
+<p>This specification defines a way for a Content Provider to connect a Readium LCP License Document to a Status Document describing the current status of the underlying license.</p>
+
+<p>It does not add any structural elements to the LCP License Document, but the link relations it defines and the potential rights it enumerates <b>MAY</b> appear in a Readium LCP License Document.</p>
+
+<h3 id="the-status-relation">4.2. The status Relation</h3>
+
+<p>This specification defines one new link relation which may be used in the <code class="highlighter-rouge">links</code> object of an LCP License Document.</p>
+
+<table class="table-bordered large">
+  <tr>
+    <th>Relation</th>
+    <th>Semantics</th>
+    <th>Required?</th>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>Location of the Status Document associated with this License Document.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<p><br /></p>
+
+<p>If a link with the relation status is not present in the <code class="highlighter-rouge">links</code> object, the client <b>MUST</b> process the LCP License Document according to the core LCP specification.</p>
+
+<p>If a link with the relation status is present in the <code class="highlighter-rouge">links</code> object, the client <b>MUST</b> process the Status Document according to the extended rules listed in <a href="#heading=h.7agurmogq68s">section 3</a> of this specification.</p>
+
+<p>The representation of the URI mentioned in the status link <b>MUST</b> be a valid Status Document.</p>
+
+<h2 id="normative-references">Normative references</h2>
+
+<p>[JSON] <a href="http://www.ietf.org/rfc/rfc4627">The application/json Media Type for JavaScript Object Notation (JSON)</a>.</p>
+
+<p>[Publications] *<a href="http://www.idpf.org/epub/301/spec/epub-publications.html">EPUB Publications 3.0.*1</a>.</p>
+
+<p>HTTP</p>
+
+<p>URI Template</p>
+
+<p>LCP</p>
+
+        </div>
+      </article>
+    </section>  
+  </div>
+</div>
+
+
+    </div>
+
+    <footer>
+  <div class="prefooter">
+    <div class="container">
+      <div class="region region-prefooter">
+        <section id="block-block-19" class="block block-block clearfix">    
+          <div class="related-site-logo related-site-logo-idpf">
+            <a href="http://idpf.org/"><img src="/assets/logos/idpf-logo-gray.png"></a>
+          </div>
+          <div class="related-site-logo related-site-logo-epub">
+            <a href="http://idpf.org/epub"><img class="related-site-logo-epub" src="/assets/logos/epub-logo-gray.png"></a>
+          </div>
+          <div class="related-site-logo related-site-logo-epubzone">
+            <a href="http://epubzone.org/"><img class="related-site-logo-epubzone" src="/assets/logos/epubzone-logo-gray.png"></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="container">
+      <div class="region region-footer">
+        <section id="social-links" class="block block-block col-sm-4 col-sm-push-5 twitter-accounts">
+          <div>
+            <span style="padding-right: 2em;">Twitter:</span> <a href="https://twitter.com/readiumjs" style="padding-right: 2em;">@readiumjs</a> <a href="https://twitter.com/epub3zone">@epub3zone</a>
+          </div>
+        </section>
+        <section id="block-menu-menu-secondary-menu" class="block block-menu col-sm-3 col-sm-push-5">    
+          <ul class="menu nav">
+            <li class="first leaf"><a href="http://readium.org/about/faq" title="">FAQ</a></li>
+            <li class="last leaf"><a href="http://readium.org/contact">Contact</a></li>
+          </ul>
+        </section>
+        <section id="copyright-notice" class="block block-block col-sm-5 col-sm-pull-7">    
+          <div class="copyright-notice">Copyright 2016 Readium Foundation. All rights reserved.</div>
+        </section>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  </body>
+</html>
